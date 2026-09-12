@@ -1,2061 +1,231 @@
 <!doctype html>
-
 <html lang="fr">
-<head><meta name="google-site-verification" content="1c8bbtxDC8fC35kznDKI3qn1hI392wk88xVnZO5i8vo" />
-<meta name="description" content="TARBTECH TELECOM : téléphones, accessoires, réparation et commande WhatsApp au Burkina Faso.">
+<head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>TARBTECH TELECOM – Téléphones, réparation et accessoires à Ouagadougou</title><style>
-:root{
-  --black:#0b0b0d;
-  --black2:#17171b;
-  --gold:#d7b64a;
-  --gold2:#f2d36a;
-  --bg:#f5f5f3;
-  --white:#fff;
-  --muted:#6d6d72;
-  --green:#168447;
-  --red:#b62a2a;
-  --purple:#7b2cbf;
-}
-
-*{box-sizing:border-box}
-
-body{
-  margin:0;
-  font-family:Arial,Helvetica,sans-serif;
-  background:var(--bg);
-  color:#171717
-}
-
-button,input,select,textarea{font:inherit}
-button{cursor:pointer}
-
-.header{
-  position:sticky;
-  top:0;
-  z-index:20;
-  background:var(--black);
-  color:#fff;
-  box-shadow:0 2px 12px #0003
-}
-
-.nav{
-  max-width:1200px;
-  margin:auto;
-  padding:13px 18px;
-  display:flex;
-  align-items:center;
-  gap:18px
-}
-
-.logo{
-  font-weight:900;
-  font-size:21px;
-  color:var(--gold);
-  line-height:1
-}
-
-.logo small{
-  display:block;
-  font-size:8px;
-  color:#fff;
-  letter-spacing:2px;
-  margin-top:3px
-}
-
-.navlinks{
-  display:flex;
-  gap:18px;
-  margin-left:auto
-}
-
-.navlinks a{
-  color:#fff;
-  text-decoration:none;
-  font-size:14px
-}
-
-.navlinks a:hover{color:var(--gold)}
-
-.cartbtn,.adminbtn{
-  border:1px solid #555;
-  background:#18181c;
-  color:#fff;
-  border-radius:22px;
-  padding:9px 13px
-}
-
-.cartbtn b{
-  background:var(--gold);
-  color:#111;
-  border-radius:50%;
-  padding:2px 6px;
-  margin-left:4px
-}
-
-.hero{
-  background:linear-gradient(120deg,#09090b,#292930);
-  color:#fff
-}
-
-.hero-pro{
-  background:radial-gradient(
-    circle at 78% 35%,
-    #3a3217 0,
-    #17150d 24%,
-    #09090b 62%
-  );
-  min-height:650px;
-  overflow:hidden;
-  position:relative
-}
-
-.hero-pro:before{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:linear-gradient(
-    115deg,
-    transparent 0 55%,
-    rgba(215,182,74,.08) 70%,
-    transparent 90%
-  );
-  pointer-events:none
-}
-
-.hero-in{
-  max-width:1180px;
-  margin:auto;
-  padding:70px 24px;
-  display:grid;
-  grid-template-columns:1.08fr .92fr;
-  gap:35px;
-  align-items:center
-}
-
-.hero-pro .hero-in{
-  min-height:650px
-}
-
-.hero-copy{
-  position:relative;
-  z-index:2
-}
-
-.eyebrow,.section-kicker{
-  font-size:12px;
-  letter-spacing:2px;
-  font-weight:800;
-  color:var(--gold2);
-  margin-bottom:12px
-}
-
-.hero-pro h1{
-  font-size:clamp(46px,6vw,78px);
-  line-height:.98;
-  margin:0 0 22px;
-  color:#fff;
-  letter-spacing:-2px
-}
-
-.hero-pro h1 span{color:var(--gold2)}
-
-.hero-lead{
-  max-width:650px;
-  color:#d2d2d2;
-  font-size:18px;
-  line-height:1.65
-}
-
-.hero-actions{
-  display:flex;
-  gap:12px;
-  flex-wrap:wrap;
-  margin:28px 0
-}
-
-.btn{
-  display:inline-block;
-  border:0;
-  border-radius:8px;
-  padding:12px 17px;
-  font-weight:800;
-  text-decoration:none
-}
-
-.gold{
-  background:var(--gold);
-  color:#111
-}
-
-.outline{
-  border:1px solid #777;
-  color:#fff;
-  background:transparent
-}
-
-/* BOUTON COMMANDER DIRECT */
-.purple-btn{
-  background:var(--purple);
-  color:#000;
-  border:0;
-  border-radius:8px;
-  padding:12px 17px;
-  font-weight:800
-}
-
-.purple-btn:hover{
-  background:#8e44c9
-}
-
-.purple-btn:disabled,
-.gold:disabled{
-  opacity:.45;
-  cursor:not-allowed
-}
-
-.trust-row{
-  display:flex;
-  gap:18px;
-  flex-wrap:wrap;
-  margin-top:32px
-}
-
-.trust-row>div{
-  display:flex;
-  gap:9px;
-  align-items:center;
-  color:#fff;
-  font-size:13px
-}
-
-.trust-row b{font-size:22px}
-.trust-row small{color:#aaa}
-
-.hero-visual{
-  min-height:500px;
-  position:relative;
-  display:flex;
-  justify-content:center;
-  align-items:center
-}
-
-.phone-mock{
-  width:245px;
-  height:475px;
-  border:7px solid #222;
-  border-radius:42px;
-  background:#050505;
-  box-shadow:
-    0 30px 80px #000,
-    0 0 70px rgba(215,182,74,.23);
-  padding:10px;
-  transform:rotate(6deg);
-  position:relative;
-  z-index:2
-}
-
-.phone-top{
-  width:78px;
-  height:20px;
-  background:#111;
-  border-radius:20px;
-  margin:0 auto 8px
-}
-
-.phone-screen{
-  height:415px;
-  border-radius:29px;
-  background:linear-gradient(155deg,#2b2613,#0b0b0c 55%,#18130a);
-  display:flex;
-  flex-direction:column;
-  justify-content:center;
-  align-items:center;
-  text-align:center;
-  color:#fff;
-  padding:25px
-}
-
-.screen-logo{
-  font-weight:900;
-  letter-spacing:2px;
-  color:var(--gold2);
-  margin-bottom:35px
-}
-
-.screen-icon{
-  font-size:70px;
-  margin-bottom:22px
-}
-
-.phone-screen strong{
-  font-size:22px;
-  line-height:1.1
-}
-
-.phone-screen small{
-  color:#bbb;
-  margin-top:15px
-}
-
-.phone-glow{
-  position:absolute;
-  width:330px;
-  height:330px;
-  border-radius:50%;
-  background:rgba(215,182,74,.13);
-  filter:blur(30px)
-}
-
-.floating-card{
-  position:absolute;
-  z-index:3;
-  background:rgba(18,18,18,.92);
-  border:1px solid #5c4c1f;
-  border-radius:14px;
-  padding:14px 16px;
-  color:#fff;
-  box-shadow:0 12px 35px #0008;
-  font-size:13px
-}
-
-.floating-card small{color:#aaa}
-.card-one{top:92px;right:0}
-.card-two{bottom:85px;left:0}
-
-.container{
-  max-width:1200px;
-  margin:auto;
-  padding:50px 18px
-}
-
-.title{
-  text-align:center;
-  margin-bottom:28px
-}
-
-.title h2{
-  font-size:31px;
-  margin:0 0 7px;
-  letter-spacing:-.5px
-}
-
-.title p{
-  color:var(--muted);
-  margin:0
-}
-
-.cats{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:15px
-}
-
-.cat{
-  background:#fff;
-  border-radius:14px;
-  padding:24px;
-  text-align:center;
-  box-shadow:0 5px 20px #0000000b;
-  text-decoration:none;
-  color:inherit;
-  transition:.2s
-}
-
-.cat:hover{
-  transform:translateY(-5px)
-}
-
-.cat .ico{font-size:40px}
-
-.cat span{
-  display:inline-block;
-  margin-top:12px;
-  color:#a88e3b;
-  font-size:13px;
-  font-weight:800
-}
-
-.shopbar{
-  display:flex;
-  gap:10px;
-  align-items:center;
-  margin-bottom:22px;
-  flex-wrap:wrap
-}
-
-.shopbar input{
-  flex:1;
-  min-width:210px;
-  padding:12px;
-  border:1px solid #ddd;
-  border-radius:8px
-}
-
-.shopbar select{
-  padding:12px;
-  border:1px solid #ddd;
-  border-radius:8px;
-  background:#fff
-}
-
-.products{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:18px
-}
-
-.product{
-  background:#fff;
-  border-radius:14px;
-  overflow:hidden;
-  box-shadow:0 5px 20px #0000000b
-}
-
-.pimg{
-  height:205px;
-  background:#eee;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:76px
-}
-
-.pinfo{
-  padding:16px
-}
-
-.tag{
-  font-size:11px;
-  color:var(--green);
-  font-weight:700
-}
-
-.pinfo h3{
-  margin:6px 0
-}
-
-.price{
-  font-weight:900;
-  font-size:19px;
-  margin:8px 0 8px
-}
-
-.stock{
-  display:inline-block;
-  font-size:11px;
-  padding:4px 8px;
-  border-radius:12px;
-  background:#222;
-  color:#fff
-}
-
-.stock.low{background:#654b00}
-.stock.out{background:#641818}
-
-.product-buttons{
-  display:grid;
-  gap:8px;
-  margin-top:14px
-}
-
-.product-buttons .btn{
-  width:100%;
-  text-align:center
-}
-
-.services{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:18px
-}
-
-.service{
-  background:var(--black);
-  color:#fff;
-  padding:28px;
-  border-radius:15px
-}
-
-.service h3{color:var(--gold)}
-.service p{
-  color:#ccc;
-  line-height:1.6
-}
-
-.contact{
-  background:#fff;
-  border-radius:18px;
-  padding:28px;
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:20px
-}
-
-.contact p{line-height:1.9}
-
-.wa{
-  background:var(--green);
-  color:#fff
-}
-
-.promo-strip{
-  max-width:1140px;
-  margin:0 auto;
-  padding:16px 22px;
-  background:#111;
-  border:1px solid #2d2d2d;
-  border-radius:15px;
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-  gap:15px;
-  color:#fff
-}
-
-.promo-strip strong{margin-left:8px}
-.promo-strip small{color:#aaa}
-.promo-strip a{
-  color:var(--gold2);
-  font-weight:800;
-  text-decoration:none;
-  white-space:nowrap
-}
-
-.promo-badge{
-  font-size:10px;
-  background:var(--gold);
-  color:#111;
-  border-radius:20px;
-  padding:5px 9px;
-  font-weight:900
-}
-
-.modal{
-  position:fixed;
-  inset:0;
-  background:#0008;
-  display:none;
-  align-items:center;
-  justify-content:center;
-  padding:15px;
-  z-index:50
-}
-
-.modal.show{display:flex}
-
-.box{
-  background:#fff;
-  border-radius:16px;
-  width:min(700px,100%);
-  max-height:90vh;
-  overflow:auto;
-  padding:24px
-}
-
-.close{
-  float:right;
-  border:0;
-  background:#eee;
-  border-radius:50%;
-  width:34px;
-  height:34px
-}
-
-.cart-row{
-  display:grid;
-  grid-template-columns:1fr auto auto;
-  gap:10px;
-  align-items:center;
-  border-bottom:1px solid #eee;
-  padding:12px 0
-}
-
-.qty{
-  display:flex;
-  align-items:center;
-  gap:6px
-}
-
-.qty button{
-  width:30px;
-  height:30px;
-  border-radius:7px;
-  border:1px solid #555;
-  background:#181818;
-  color:#fff
-}
-
-.total{
-  font-size:21px;
-  font-weight:900;
-  text-align:right;
-  margin:20px 0
-}
-
-.form{
-  display:grid;
-  gap:10px
-}
-
-.form input,
-.form textarea,
-.form select{
-  width:100%;
-  padding:11px;
-  border:1px solid #ddd;
-  border-radius:7px
-}
-
-.empty{
-  padding:30px;
-  text-align:center;
-  color:var(--muted)
-}
-
-.admin{
-  display:none
-}
-
-.admin.show{display:block}
-
-.admin-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:15px
-}
-
-.admin-card{
-  background:#fff;
-  border-radius:14px;
-  padding:20px
-}
-
-.danger{
-  background:#eee;
-  color:#a00;
-  border:0;
-  border-radius:7px;
-  padding:8px
-}
-
-.order-card{
-  border:1px solid #ddd;
-  border-radius:10px;
-  padding:12px;
-  margin:8px 0
-}
-
-.toast{
-  position:fixed;
-  right:15px;
-  bottom:15px;
-  background:#111;
-  color:#fff;
-  border:1px solid var(--gold);
-  padding:12px 16px;
-  border-radius:10px;
-  z-index:9999;
-  display:none
-}
-
-footer{
-  background:#09090a;
-  color:#bbb;
-  text-align:center;
-  padding:30px 18px
-}
-
-footer strong{color:var(--gold)}
-
-@media(max-width:900px){
-  .products{grid-template-columns:repeat(2,1fr)}
-  .cats{grid-template-columns:repeat(2,1fr)}
-  .hero-in{grid-template-columns:1fr}
-  .navlinks{display:none}
-}
-
-@media(max-width:800px){
-  .hero-pro .hero-in{
-    grid-template-columns:1fr;
-    padding-top:55px;
-    padding-bottom:55px
-  }
-
-  .hero-pro{min-height:auto}
-  .hero-pro .hero-in{min-height:auto}
-  .hero-visual{min-height:430px}
-  .phone-mock{
-    width:205px;
-    height:405px
-  }
-
-  .phone-screen{height:350px}
-  .card-one{
-    right:3%;
-    top:45px
-  }
-
-  .card-two{
-    left:3%;
-    bottom:50px
-  }
-
-  .promo-strip{
-    margin:0 14px;
-    flex-direction:column;
-    align-items:flex-start
-  }
-}
-
-@media(max-width:560px){
-  .products,
-  .cats,
-  .services,
-  .contact,
-  .admin-grid{
-    grid-template-columns:1fr
-  }
-
-  .container{padding:38px 14px}
-  .hero-in{padding:48px 14px}
-
-  .hero-pro h1{font-size:47px}
-  .hero-lead{font-size:16px}
-  .trust-row{gap:12px}
-  .hero-visual{min-height:390px}
-
-  .phone-mock{
-    width:180px;
-    height:355px
-  }
-
-  .phone-screen{height:305px}
-  .screen-icon{font-size:52px}
-  .phone-screen strong{font-size:18px}
-
-  .floating-card{
-    font-size:11px;
-    padding:10px 12px
-  }
-
-  .card-one{top:30px}
-  .card-two{bottom:25px}
-
-  .cart-row{
-    grid-template-columns:1fr;
-    gap:8px
-  }
-}
-</style></head><body><header class="header">
-  <div class="nav">
-    <a class="logo" href="#accueil">
-      TARBTECH
-      <small>TELECOM</small>
-    </a><nav class="navlinks">
-  <a href="#accueil">Accueil</a>
-  <a href="#boutique">Boutique</a>
-  <a href="#services">Services</a>
-  <a href="#contact">Contact</a>
-</nav>
-
-<button class="cartbtn" onclick="openCart()">
-  🛒 Panier <b id="cartCount">0</b>
-</button>
-
-<button class="adminbtn" onclick="openAdmin()">
-  ⚙️ Admin
-</button>
-
-  </div>
-</header><main id="accueil"><section class="hero hero-pro">
-  <div class="hero-in"><div class="hero-copy">
-  <div class="eyebrow">
-    TARBTECH TELECOM • OUAGADOUGOU
-  </div>
-
-  <h1>
-    Le bon téléphone.<br>
-    <span>Le bon service.</span>
-  </h1>
-
-  <p class="hero-lead">
-    Téléphones, accessoires et réparation avec une expérience simple,
-    rapide et adaptée au Burkina Faso.
-  </p>
-
-  <div class="hero-actions">
-    <a class="btn gold" href="#boutique">
-      🛍️ Voir la boutique
-    </a>
-
-    <a class="btn outline"
-       href="https://wa.me/22676075658"
-       target="_blank">
-      💬 Commander sur WhatsApp
-    </a>
-
-    <a class="btn outline"
-       href="https://www.facebook.com/profile.php?id=61562042137940"
-       target="_blank"
-       rel="noopener">
-      📘 Notre Facebook
-    </a>
-  </div>
-
-  <div class="trust-row">
-    <div>
-      <b>📱</b>
-      <span>
-        Téléphones<br>
-        <small>Neufs & occasions</small>
-      </span>
-    </div>
-
-    <div>
-      <b>🔧</b>
-      <span>
-        Réparation<br>
-        <small>Diagnostic & dépannage</small>
-      </span>
-    </div>
-
-    <div>
-      <b>🚚</b>
-      <span>
-        Livraison<br>
-        <small>Ouagadougou & alentours</small>
-      </span>
-    </div>
-  </div>
+<meta name="description" content="TARBTECH TELECOM : téléphones, accessoires, réparation et commande WhatsApp au Burkina Faso.">
+<title>TARBTECH TELECOM — Boutique en ligne</title>
+<style>
+:root{--black:#0b0b0d;--black2:#17171b;--gold:#d7b64a;--gold2:#f2d36a;--bg:#f5f5f3;--white:#fff;--muted:#6d6d72;--green:#168447;--red:#b62a2a;--purple:#7c3aed}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:#171717}
+button,input,select,textarea{font:inherit}button{cursor:pointer}
+.header{position:sticky;top:0;z-index:20;background:var(--black);color:#fff;box-shadow:0 2px 12px #0003}
+.nav{max-width:1200px;margin:auto;padding:13px 18px;display:flex;align-items:center;gap:18px}
+.logo{font-weight:900;font-size:21px;color:var(--gold);line-height:1;text-decoration:none}.logo small{display:block;font-size:8px;color:#fff;letter-spacing:2px;margin-top:3px}
+.navlinks{display:flex;gap:18px;margin-left:auto}.navlinks a{color:#fff;text-decoration:none;font-size:14px}.navlinks a:hover{color:var(--gold)}
+.cartbtn,.adminbtn{border:1px solid #555;background:#18181c;color:#fff;border-radius:22px;padding:9px 13px}
+.cartbtn b{background:var(--gold);color:#111;border-radius:50%;padding:2px 6px;margin-left:4px}
+.hero{color:#fff}.hero-pro{background:radial-gradient(circle at 78% 35%,#3a3217 0,#17150d 24%,#09090b 62%);min-height:650px;overflow:hidden;position:relative}
+.hero-pro:before{content:"";position:absolute;inset:0;background:linear-gradient(115deg,transparent 0 55%,rgba(215,182,74,.08) 70%,transparent 90%);pointer-events:none}
+.hero-in{max-width:1180px;margin:auto;padding:70px 24px;display:grid;grid-template-columns:1.08fr .92fr;align-items:center;gap:35px}
+.hero-copy{position:relative;z-index:2}.eyebrow,.section-kicker{font-size:12px;letter-spacing:2px;font-weight:800;color:var(--gold2);margin-bottom:12px}
+.hero-pro h1{font-size:clamp(46px,6vw,78px);line-height:.98;margin:0 0 22px;color:#fff;letter-spacing:-2px}.hero-pro h1 span{color:var(--gold2)}
+.hero-lead{max-width:650px;color:#d2d2d2;font-size:18px;line-height:1.65}
+.hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin:28px 0}
+.trust-row{display:flex;gap:18px;flex-wrap:wrap;margin-top:32px}.trust-row>div{display:flex;gap:9px;align-items:center;color:#fff;font-size:13px}.trust-row b{font-size:22px}.trust-row small{color:#aaa}
+.hero-visual{min-height:500px;position:relative;display:flex;justify-content:center;align-items:center}
+.phone-mock{width:245px;height:475px;border:7px solid #222;border-radius:42px;background:#050505;box-shadow:0 30px 80px #000,0 0 70px rgba(215,182,74,.23);padding:10px;transform:rotate(6deg);position:relative;z-index:2}
+.phone-top{width:78px;height:20px;background:#111;border-radius:20px;margin:0 auto 8px}
+.phone-screen{height:415px;border-radius:29px;background:linear-gradient(155deg,#2b2613,#0b0b0c 55%,#18130a);display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;color:#fff;padding:25px}.screen-logo{font-weight:900;letter-spacing:2px;color:var(--gold2);margin-bottom:35px}.screen-icon{font-size:70px;margin-bottom:22px}.phone-screen strong{font-size:22px;line-height:1.1}.phone-screen small{color:#bbb;margin-top:15px}
+.phone-glow{position:absolute;width:330px;height:330px;border-radius:50%;background:rgba(215,182,74,.13);filter:blur(30px)}
+.floating-card{position:absolute;z-index:3;background:rgba(18,18,18,.92);border:1px solid #5c4c1f;border-radius:14px;padding:14px 16px;color:#fff;box-shadow:0 12px 35px #0008;font-size:13px}.floating-card small{color:#aaa}.card-one{top:92px;right:0}.card-two{bottom:85px;left:0}
+.btn{display:inline-block;border:0;border-radius:8px;padding:12px 17px;font-weight:800;text-decoration:none}.gold{background:var(--gold);color:#111}.outline{border:1px solid #777;color:#fff;background:transparent}.wa{background:var(--green);color:#fff}
+.container{max-width:1200px;margin:auto;padding:50px 18px}.title{text-align:center;margin-bottom:28px}.title h2{font-size:31px;margin:0 0 7px}.title p{color:var(--muted);margin:0}.title h2{letter-spacing:-.5px}
+.cats{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}.cat{background:#fff;border-radius:14px;padding:24px;text-align:center;box-shadow:0 5px 20px #0000000b;text-decoration:none;color:inherit;transition:.2s}.cat:hover{transform:translateY(-5px)}.cat .ico{font-size:40px}.cat span{display:inline-block;margin-top:12px;color:#a88e3b;font-size:13px;font-weight:800}
+.promo-strip{max-width:1140px;margin:0 auto;padding:16px 22px;background:#111;border:1px solid #2d2d2d;border-radius:15px;display:flex;justify-content:space-between;align-items:center;gap:15px;color:#fff}.promo-strip strong{margin-left:8px}.promo-strip small{color:#aaa}.promo-strip a{color:var(--gold2);font-weight:800;text-decoration:none;white-space:nowrap}.promo-badge{font-size:10px;background:var(--gold);color:#111;border-radius:20px;padding:5px 9px;font-weight:900}
+.shopbar{display:flex;gap:10px;align-items:center;margin-bottom:22px;flex-wrap:wrap}.shopbar input{flex:1;min-width:210px;padding:12px;border:1px solid #ddd;border-radius:8px}.shopbar select{padding:12px;border:1px solid #ddd;border-radius:8px;background:#fff}
+.products{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}.product{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 5px 20px #0000000b}.pimg{height:205px;background:#eee;display:flex;align-items:center;justify-content:center;font-size:76px}.pinfo{padding:16px}.tag{font-size:11px;color:var(--green);font-weight:700}.pinfo h3{margin:6px 0}.price{font-weight:900;font-size:19px;margin:8px 0 13px}.pinfo .btn{width:100%;text-align:center}
+.order-btn{background:var(--purple);color:#111;border:1px solid var(--purple);font-weight:900;margin-top:8px}.order-btn:hover{filter:brightness(1.08)}
+.services{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.service{background:var(--black);color:#fff;padding:28px;border-radius:15px}.service h3{color:var(--gold)}.service p{color:#ccc;line-height:1.6}
+.contact{background:#fff;border-radius:18px;padding:28px;display:grid;grid-template-columns:1fr 1fr;gap:20px}.contact p{line-height:1.9}
+footer{background:#09090a;color:#bbb;text-align:center;padding:30px 18px}footer strong{color:var(--gold)}
+.modal{position:fixed;inset:0;background:#0008;display:none;align-items:center;justify-content:center;padding:15px;z-index:50}.modal.show{display:flex}.box{background:#fff;border-radius:16px;width:min(700px,100%);max-height:90vh;overflow:auto;padding:24px}.close{float:right;border:0;background:#eee;border-radius:50%;width:34px;height:34px}.cart-row{display:grid;grid-template-columns:1fr auto auto;gap:10px;align-items:center;border-bottom:1px solid #eee;padding:12px 0}.qty button{border:1px solid #ddd;background:#fff;padding:3px 8px}.total{font-size:21px;font-weight:900;text-align:right;margin:20px 0}.form{display:grid;gap:10px}.form input,.form textarea,.form select{width:100%;padding:11px;border:1px solid #ddd;border-radius:7px}.empty{padding:30px;text-align:center;color:var(--muted)}
+.admin{display:none}.admin.show{display:block}.admin-grid{display:grid;grid-template-columns:1fr 1fr;gap:15px}.admin-card{background:#fff;border-radius:14px;padding:20px}.danger{background:#eee;color:#a00;border:0;border-radius:7px;padding:8px}.toast{position:fixed;right:15px;bottom:15px;background:#111;color:#fff;border:1px solid var(--gold);padding:12px 16px;border-radius:10px;z-index:9999;display:none}
+.stock{font-size:12px;padding:3px 7px;border-radius:12px;background:#222;color:#fff}.low{background:#654b00}.out{background:#641818}.order-card{border:1px solid #333;border-radius:10px;padding:10px;margin:8px 0}
+@media(max-width:900px){.products{grid-template-columns:repeat(2,1fr)}.cats{grid-template-columns:repeat(2,1fr)}.hero-in{grid-template-columns:1fr}.navlinks{display:none}}
+@media(max-width:560px){.products,.cats,.services,.contact,.admin-grid{grid-template-columns:1fr}.container{padding:38px 14px}.hero-in{padding:48px 14px}.hero-pro h1{font-size:47px}.hero-lead{font-size:16px}.hero-visual{min-height:390px}.phone-mock{width:180px;height:355px}.phone-screen{height:305px}.screen-icon{font-size:52px}.phone-screen strong{font-size:18px}.floating-card{font-size:11px;padding:10px 12px}.card-one{top:30px}.card-two{bottom:25px}.promo-strip{margin:0 14px;flex-direction:column;align-items:flex-start}}
+</style>
+</head>
+<body>
+<header class="header"><div class="nav">
+<a class="logo" href="#accueil">TARBTECH<small>TELECOM</small></a>
+<nav class="navlinks"><a href="#accueil">Accueil</a><a href="#boutique">Boutique</a><a href="#services">Services</a><a href="#contact">Contact</a></nav>
+<button class="cartbtn" onclick="openCart()">🛒 Panier <b id="cartCount">0</b></button>
+<button class="adminbtn" onclick="openAdmin()">⚙️ Admin</button>
+</div></header>
+
+<main id="accueil">
+<section class="hero hero-pro"><div class="hero-in">
+<div class="hero-copy">
+<div class="eyebrow">TARBTECH TELECOM • OUAGADOUGOU</div>
+<h1>Le bon téléphone.<br><span>Le bon service.</span></h1>
+<p class="hero-lead">Téléphones, accessoires et réparation avec une expérience simple, rapide et adaptée au Burkina Faso.</p>
+<div class="hero-actions">
+<a class="btn gold" href="#boutique">🛍️ Voir la boutique</a>
+<a class="btn outline" href="https://wa.me/22676075658" target="_blank" rel="noopener">💬 Commander sur WhatsApp</a>
+<a class="btn outline" href="https://www.facebook.com/profile.php?id=61562042137940" target="_blank" rel="noopener">📘 Notre Facebook</a>
 </div>
+<div class="trust-row">
+<div><b>📱</b><span>Téléphones<br><small>Neufs & occasions</small></span></div>
+<div><b>🔧</b><span>Réparation<br><small>Diagnostic & dépannage</small></span></div>
+<div><b>🚚</b><span>Livraison<br><small>Ouagadougou & alentours</small></span></div>
+</div></div>
+<div class="hero-visual"><div class="phone-glow"></div><div class="phone-mock"><div class="phone-top"></div><div class="phone-screen"><div class="screen-logo">TARBTECH</div><div class="screen-icon">📱</div><strong>Votre mobile,<br>notre expertise.</strong><small>Vente • Réparation • Accessoires</small></div></div><div class="floating-card card-one">⚡ <b>Prix compétitifs</b><br><small>Des offres pour tous les budgets</small></div><div class="floating-card card-two">🛠️ <b>Service fiable</b><br><small>Une équipe à votre écoute</small></div></div>
+</div></section>
 
-<div class="hero-visual">
+<section class="container category-pro"><div class="title"><span class="section-kicker">EXPLOREZ</span><h2>Tout pour votre mobile</h2><p>Découvrez rapidement nos produits et services.</p></div>
+<div class="cats">
+<a class="cat" href="#boutique" onclick="setCategory('Téléphones')"><div class="ico">📱</div><h3>Téléphones</h3><p>Samsung, iPhone, Infinix…</p><span>Découvrir →</span></a>
+<a class="cat" href="#boutique" onclick="setCategory('Accessoires')"><div class="ico">🎧</div><h3>Accessoires</h3><p>Coques, chargeurs, écouteurs…</p><span>Découvrir →</span></a>
+<a class="cat" href="#services"><div class="ico">🔧</div><h3>Réparation</h3><p>Écran, batterie, charge, diagnostic.</p><span>Voir le service →</span></a>
+<a class="cat" href="#contact"><div class="ico">🚚</div><h3>Livraison</h3><p>Commande simple et livraison.</p><span>Nous contacter →</span></a>
+</div></section>
 
-  <div class="phone-glow"></div>
+<section class="promo-strip"><div><span class="promo-badge">NOUVEAU</span><strong>TARBTECH TELECOM est votre boutique mobile.</strong><small> Commandez en ligne et finalisez facilement par WhatsApp.</small></div><a href="https://wa.me/22676075658" target="_blank" rel="noopener">Nous écrire →</a></section>
 
-  <div class="phone-mock">
-    <div class="phone-top"></div>
+<section id="boutique" class="container"><div class="title"><h2>Boutique</h2><p>Produits disponibles avec commande rapide.</p></div>
+<div class="shopbar"><input id="search" placeholder="🔎 Rechercher un produit..." oninput="renderProducts()"><select id="category" onchange="renderProducts()"><option value="">Toutes les catégories</option><option>Téléphones</option><option>Accessoires</option></select></div>
+<div id="products" class="products"></div></section>
 
-    <div class="phone-screen">
-      <div class="screen-logo">TARBTECH</div>
-      <div class="screen-icon">📱</div>
+<section id="services" class="container"><div class="title"><h2>Nos services</h2><p>Des solutions simples pour tes clients.</p></div>
+<div class="services"><div class="service"><div>📲</div><h3>Vente</h3><p>Catalogue avec prix, disponibilité et commande en ligne.</p></div><div class="service"><div>🔧</div><h3>Réparation</h3><p>Écran, batterie, connecteur de charge, diagnostic et autres interventions.</p></div><div class="service"><div>🚚</div><h3>Livraison</h3><p>Les frais de livraison pourront être configurés selon la zone.</p></div></div></section>
 
-      <strong>
-        Votre mobile,<br>
-        notre expertise.
-      </strong>
+<section id="contact" class="container"><div class="contact"><div><h2>Contact</h2><p>📞 76 07 56 58<br>📞 79 96 62 55<br>📍 Ouagadougou, Burkina Faso</p></div><div><h3>Commander rapidement</h3><p>La validation de commande se fait par WhatsApp.</p><a class="btn wa" href="https://wa.me/22676075658" target="_blank" rel="noopener">💬 Écrire sur WhatsApp</a></div><div><a class="btn outline" style="background:#111" href="https://www.facebook.com/profile.php?id=61562042137940" target="_blank" rel="noopener">📘 Visiter notre Facebook</a></div></div></section>
+</main>
 
-      <small>
-        Vente • Réparation • Accessoires
-      </small>
-    </div>
-  </div>
+<section id="admin" class="container admin"><div class="title"><h2>Administration</h2><p>Les produits et commandes sont enregistrés sur cet appareil.</p></div>
+<div class="admin-grid"><div class="admin-card"><h3>Ajouter un produit</h3><div class="form"><input id="pn" placeholder="Nom du produit"><input id="pp" type="number" placeholder="Prix FCFA"><select id="pc"><option>Téléphones</option><option>Accessoires</option></select><input id="ps" type="number" value="1" placeholder="Stock"><input id="pi" placeholder="Emoji (ex: 📱)"><input id="pd" placeholder="Description"><button class="btn gold" onclick="addProduct()">Ajouter le produit</button></div></div>
+<div class="admin-card"><h3>Gestion des produits</h3><div id="adminList"></div><button class="danger" onclick="resetProducts()">Réinitialiser les produits</button><br><br><button class="btn" style="background:#111;color:#fff" onclick="closeAdmin()">Fermer</button></div></div>
+<div class="admin-card" style="margin-top:20px"><h3>📦 Commandes reçues</h3><div id="ordersList"></div><button class="btn" style="background:#111;color:#fff" onclick="exportOrders()">Exporter les commandes</button></div></section>
 
-  <div class="floating-card card-one">
-    ⚡ <b>Prix compétitifs</b><br>
-    <small>Des offres pour tous les budgets</small>
-  </div>
+<div id="cartModal" class="modal" onclick="if(event.target===this)closeCart()"><div class="box"><button class="close" onclick="closeCart()">×</button><h2>🛒 Mon panier</h2><div id="cart"></div><div class="total" id="total"></div><hr><h3>Informations de commande</h3><div class="form"><input id="customer" placeholder="Votre nom"><input id="phone" placeholder="Votre numéro de téléphone"><input id="address" placeholder="Quartier / lieu de livraison"><select id="delivery"><option>Livraison</option><option>Retrait en boutique</option></select><button class="btn wa" onclick="orderWhatsApp()">📲 Envoyer la commande sur WhatsApp</button></div></div></div>
+<footer><strong>TARBTECH TELECOM</strong><br>Vente • Réparation • Accessoires<br><small>© 2026 TARBTECH TELECOM</small></footer>
+<div id="toast" class="toast"></div>
 
-  <div class="floating-card card-two">
-    🛠️ <b>Service fiable</b><br>
-    <small>Une équipe à votre écoute</small>
-  </div>
+<script>
+const PRODUCT_KEY='tarbtech_products_v5';
+const CART_KEY='tarbtech_cart_v5';
+const ORDER_KEY='tarbtech_orders_v5';
 
-</div>
-
-  </div>
-</section><section class="container category-pro">  <div class="title">
-    <span class="section-kicker">EXPLOREZ</span>
-    <h2>Tout pour votre mobile</h2>
-    <p>Découvrez rapidement nos produits et services.</p>
-  </div>  <div class="cats"><a class="cat"
-   href="#boutique"
-   onclick="setCategory('Téléphones')">
-  <div class="ico">📱</div>
-  <h3>Téléphones</h3>
-  <p>Samsung, iPhone, Infinix…</p>
-  <span>Découvrir →</span>
-</a>
-
-<a class="cat"
-   href="#boutique"
-   onclick="setCategory('Accessoires')">
-  <div class="ico">🎧</div>
-  <h3>Accessoires</h3>
-  <p>Coques, chargeurs, écouteurs…</p>
-  <span>Découvrir →</span>
-</a>
-
-<a class="cat" href="#services">
-  <div class="ico">🔧</div>
-  <h3>Réparation</h3>
-  <p>Écran, batterie, charge, diagnostic.</p>
-  <span>Voir le service →</span>
-</a>
-
-<a class="cat" href="#contact">
-  <div class="ico">🚚</div>
-  <h3>Livraison</h3>
-  <p>Commande simple et livraison.</p>
-  <span>Nous contacter →</span>
-</a>
-
-  </div>
-</section><section class="promo-strip">
-  <div>
-    <span class="promo-badge">NOUVEAU</span>
-    <strong>TARBTECH TELECOM est votre boutique mobile.</strong>
-    <small>
-      Commandez en ligne et finalisez facilement par WhatsApp.
-    </small>
-  </div>  <a href="https://wa.me/22676075658" target="_blank">
-    Nous écrire →
-  </a>
-</section><section id="boutique" class="container">  <div class="title">
-    <h2>Boutique</h2>
-    <p>
-      Découvrez nos téléphones et accessoires disponibles.
-    </p>
-  </div>  <div class="shopbar"><input
-  id="search"
-  placeholder="🔎 Rechercher un produit..."
-  oninput="renderProducts()">
-
-<select id="category" onchange="renderProducts()">
-  <option value="">Toutes les catégories</option>
-  <option value="Téléphones">Téléphones</option>
-  <option value="Accessoires">Accessoires</option>
-</select>
-
-  </div>  <div id="products" class="products"></div></section><section id="services" class="container">  <div class="title">
-    <h2>Nos services</h2>
-    <p>Des solutions simples pour tes clients.</p>
-  </div>  <div class="services"><div class="service">
-  <div>📲</div>
-  <h3>Vente</h3>
-  <p>
-    Catalogue avec prix, disponibilité et commande en ligne.
-  </p>
-</div>
-
-<div class="service">
-  <div>🔧</div>
-  <h3>Réparation</h3>
-  <p>
-    Écran, batterie, connecteur de charge, diagnostic
-    et autres interventions.
-  </p>
-</div>
-
-<div class="service">
-  <div>🚚</div>
-  <h3>Livraison</h3>
-  <p>
-    Les frais de livraison pourront être configurés
-    selon la zone.
-  </p>
-</div>
-
-  </div>
-</section><section id="contact" class="container">  <div class="contact"><div>
-  <h2>Contact</h2>
-
-  <p>
-    📞 76 07 56 58<br>
-    📞 79 96 62 55<br>
-    📍 Ouagadougou, Burkina Faso
-  </p>
-</div>
-
-<div>
-  <h3>Commander rapidement</h3>
-
-  <p>
-    Pour l'instant, la validation de commande
-    se fait par WhatsApp.
-  </p>
-
-  <a class="btn wa"
-     href="https://wa.me/22676075658"
-     target="_blank">
-    💬 Écrire sur WhatsApp
-  </a>
-</div>
-
-<div style="margin-top:18px">
-  <a class="btn outline"
-     href="https://www.facebook.com/profile.php?id=61562042137940"
-     target="_blank"
-     rel="noopener">
-    📘 Visiter notre Facebook
-  </a>
-</div>
-
-  </div>
-</section></main><section id="admin" class="container admin">  <div class="title">
-    <h2>Administration</h2>
-    <p>
-      Gestion des produits et commandes enregistrées
-      sur cet appareil.
-    </p>
-  </div>  <div class="admin-grid"><div class="admin-card">
-
-  <h3>Ajouter un produit</h3>
-
-  <div class="form">
-
-    <input id="pn" placeholder="Nom du produit">
-
-    <input
-      id="pp"
-      type="number"
-      placeholder="Prix FCFA">
-
-    <select id="pc">
-      <option value="Téléphones">Téléphones</option>
-      <option value="Accessoires">Accessoires</option>
-    </select>
-
-    <input
-      id="ps"
-      type="number"
-      placeholder="Stock"
-      value="1">
-
-    <input
-      id="pi"
-      placeholder="Emoji (ex: 📱)">
-
-    <input
-      id="pd"
-      placeholder="Description">
-
-    <button class="btn gold" onclick="addProduct()">
-      Ajouter le produit
-    </button>
-
-  </div>
-</div>
-
-<div class="admin-card">
-
-  <h3>Gestion des produits</h3>
-
-  <div id="adminList"></div>
-
-  <button class="danger" onclick="resetProducts()">
-    Réinitialiser les produits
-  </button>
-
-  <br><br>
-
-  <button
-    class="btn"
-    style="background:#111;color:#fff"
-    onclick="closeAdmin()">
-    Fermer
-  </button>
-
-</div>
-
-  </div>  <div class="admin-card" style="margin-top:20px"><h3>📦 Commandes reçues</h3>
-
-<div id="ordersList"></div>
-
-<button
-  class="btn"
-  style="background:#111;color:#fff"
-  onclick="exportOrders()">
-  Exporter les commandes
-</button>
-
-  </div></section><div
-  id="cartModal"
-  class="modal"
-  onclick="if(event.target===this)closeCart()">  <div class="box"><button class="close" onclick="closeCart()">×</button>
-
-<h2>🛒 Mon panier</h2>
-
-<div id="cart"></div>
-
-<div class="total" id="total"></div>
-
-<hr>
-
-<h3>Informations de commande</h3>
-
-<div class="form">
-
-  <input
-    id="customer"
-    placeholder="Votre nom">
-
-  <input
-    id="phone"
-    placeholder="Votre numéro de téléphone">
-
-  <input
-    id="address"
-    placeholder="Quartier / lieu de livraison">
-
-  <select id="delivery">
-    <option value="Livraison">Livraison</option>
-    <option value="Retrait en boutique">
-      Retrait en boutique
-    </option>
-  </select>
-
-  <button
-    class="btn wa"
-    onclick="orderWhatsApp()">
-    📲 Envoyer la commande sur WhatsApp
-  </button>
-
-</div>
-
-  </div>
-</div><div id="toast" class="toast"></div><footer>
-  <strong>TARBTECH TELECOM</strong><br>
-  Vente • Réparation • Accessoires<br>
-  <small>© 2026 TARBTECH TELECOM</small>
-</footer><script>
-
-/* =========================================================
-   TARBTECH TELECOM
-   UN SEUL SYSTÈME : PRODUITS + PANIER + COMMANDES + ADMIN
-   ========================================================= */
-
-const PRODUCT_KEY = "tarbtech_products_v4";
-const CART_KEY = "tarbtech_cart_v4";
-const ORDER_KEY = "tarbtech_orders_v4";
-
-const defaultProducts = [
-  {
-    id:1,
-    name:"Samsung Galaxy A55",
-    price:185000,
-    category:"Téléphones",
-    icon:"📱",
-    stock:3,
-    desc:"Smartphone Samsung."
-  },
-  {
-    id:2,
-    name:"iPhone 13",
-    price:250000,
-    category:"Téléphones",
-    icon:"📱",
-    stock:2,
-    desc:"iPhone 13 vérifié."
-  },
-  {
-    id:3,
-    name:"Infinix Hot 60i",
-    price:95000,
-    category:"Téléphones",
-    icon:"📱",
-    stock:5,
-    desc:"Smartphone Infinix."
-  },
-  {
-    id:4,
-    name:"Écouteurs Bluetooth",
-    price:10000,
-    category:"Accessoires",
-    icon:"🎧",
-    stock:10,
-    desc:"Écouteurs sans fil."
-  },
-  {
-    id:5,
-    name:"Chargeur rapide",
-    price:7500,
-    category:"Accessoires",
-    icon:"🔌",
-    stock:12,
-    desc:"Chargeur USB rapide."
-  },
-  {
-    id:6,
-    name:"Coque téléphone",
-    price:5000,
-    category:"Accessoires",
-    icon:"📱",
-    stock:20,
-    desc:"Coques selon modèle."
-  }
+const defaultProducts=[
+{id:1,name:'Samsung Galaxy A55',price:185000,category:'Téléphones',icon:'📱',stock:3,desc:'Smartphone Samsung.'},
+{id:2,name:'iPhone 13',price:250000,category:'Téléphones',icon:'📱',stock:2,desc:'iPhone 13 vérifié.'},
+{id:3,name:'Infinix Hot 60i',price:95000,category:'Téléphones',icon:'📱',stock:5,desc:'Smartphone Infinix.'},
+{id:4,name:'Écouteurs Bluetooth',price:10000,category:'Accessoires',icon:'🎧',stock:10,desc:'Écouteurs sans fil.'},
+{id:5,name:'Chargeur rapide',price:7500,category:'Accessoires',icon:'🔌',stock:12,desc:'Chargeur USB rapide.'},
+{id:6,name:'Coque téléphone',price:5000,category:'Accessoires',icon:'📱',stock:20,desc:'Coques selon modèle.'}
 ];
 
-/* ---------- OUTILS ---------- */
+let products=JSON.parse(localStorage.getItem(PRODUCT_KEY)||'null')||defaultProducts.map(x=>({...x}));
+let cart=JSON.parse(localStorage.getItem(CART_KEY)||'[]');
 
-const money = n =>
-  Number(n).toLocaleString("fr-FR") + " FCFA";
-
-function getProducts(){
-  return JSON.parse(
-    localStorage.getItem(PRODUCT_KEY) || "null"
-  ) || [];
-}
-
-function getCart(){
-  return JSON.parse(
-    localStorage.getItem(CART_KEY) || "[]"
-  );
-}
-
-function getOrders(){
-  return JSON.parse(
-    localStorage.getItem(ORDER_KEY) || "[]"
-  );
-}
-
-function saveProducts(data){
-  localStorage.setItem(
-    PRODUCT_KEY,
-    JSON.stringify(data)
-  );
-}
-
-function saveCart(data){
-  localStorage.setItem(
-    CART_KEY,
-    JSON.stringify(data)
-  );
-}
-
-function saveOrders(data){
-  localStorage.setItem(
-    ORDER_KEY,
-    JSON.stringify(data)
-  );
-}
-
-function toast(message){
-  const element = document.getElementById("toast");
-
-  element.textContent = message;
-  element.style.display = "block";
-
-  setTimeout(() => {
-    element.style.display = "none";
-  },2000);
-}
-
-/* ---------- MIGRATION ANCIEN SYSTÈME ---------- */
-
-function initializeData(){
-
-  if(localStorage.getItem(PRODUCT_KEY)){
-    return;
-  }
-
-  let oldProducts =
-    JSON.parse(
-      localStorage.getItem("tarbtech_products_v3") || "null"
-    );
-
-  if(Array.isArray(oldProducts) && oldProducts.length){
-
-    oldProducts = oldProducts.map(x => ({
-      id:x.id,
-      name:x.name || x.n || "Produit",
-      price:Number(x.price ?? x.p ?? 0),
-      category:x.category || x.c || "Accessoires",
-      icon:x.icon || x.i || "📦",
-      stock:Number(x.stock ?? 10),
-      desc:x.desc || ""
-    }));
-
-    saveProducts(oldProducts);
-
-  }else{
-
-    saveProducts(defaultProducts);
-  }
-
-  if(!localStorage.getItem(CART_KEY)){
-    saveCart([]);
-  }
-
-  if(!localStorage.getItem(ORDER_KEY)){
-    saveOrders([]);
-  }
-}
-
-/* ---------- PRODUITS ---------- */
+const money=n=>Number(n).toLocaleString('fr-FR')+' FCFA';
+function save(){localStorage.setItem(PRODUCT_KEY,JSON.stringify(products));localStorage.setItem(CART_KEY,JSON.stringify(cart));}
+function toast(t){const e=document.getElementById('toast');e.textContent=t;e.style.display='block';setTimeout(()=>e.style.display='none',2000)}
+function setCategory(c){document.getElementById('category').value=c;renderProducts()}
 
 function renderProducts(){
-
-  const products = getProducts();
-
-  const search =
-    document.getElementById("search")
-      .value
-      .toLowerCase()
-      .trim();
-
-  const category =
-    document.getElementById("category").value;
-
-  const list = products.filter(product => {
-
-    const matchesSearch =
-      !search ||
-      product.name.toLowerCase().includes(search);
-
-    const matchesCategory =
-      !category ||
-      product.category === category;
-
-    return matchesSearch && matchesCategory;
-  });
-
-  const container =
-    document.getElementById("products");
-
-  if(!list.length){
-
-    container.innerHTML =
-      '<div class="empty">Aucun produit trouvé.</div>';
-
-    updateCartCount();
-    return;
-  }
-
-  container.innerHTML = list.map(product => {
-
-    const stockClass =
-      product.stock === 0
-        ? "out"
-        : product.stock <= 2
-        ? "low"
-        : "";
-
-    const stockText =
-      product.stock > 0
-        ? "Stock : " + product.stock
-        : "Rupture";
-
-    return `
-      <article class="product">
-
-        <div class="pimg">
-          ${product.icon}
-        </div>
-
-        <div class="pinfo">
-
-          <span class="tag">
-            ${product.category}
-          </span>
-
-          <h3>
-            ${product.name}
-          </h3>
-
-          <div class="price">
-            ${money(product.price)}
-          </div>
-
-          <span class="stock ${stockClass}">
-            ${stockText}
-          </span>
-
-          <div class="product-buttons">
-
-            <button
-              class="btn gold"
-              ${product.stock <= 0 ? "disabled" : ""}
-              onclick="addToCart(${product.id})">
-              🛒 Ajouter au panier
-            </button>
-
-            <button
-              class="btn purple-btn"
-              ${product.stock <= 0 ? "disabled" : ""}
-              onclick="directOrder(${product.id})">
-              💬 Commander direct
-            </button>
-
-          </div>
-
-        </div>
-
-      </article>
-    `;
-
-  }).join("");
-
-  updateCartCount();
+ const q=(document.getElementById('search').value||'').toLowerCase();
+ const c=document.getElementById('category').value;
+ const list=products.filter(x=>(!q||x.name.toLowerCase().includes(q))&&(!c||x.category===c));
+ document.getElementById('products').innerHTML=list.length?list.map(x=>`
+ <article class="product">
+   <div class="pimg">${x.icon||'📦'}</div>
+   <div class="pinfo">
+     <span class="tag">${x.category}</span>
+     <h3>${x.name}</h3>
+     <p>${x.desc||''}</p>
+     <div class="price">${money(x.price)}</div>
+     <span class="stock ${x.stock===0?'out':x.stock<=2?'low':''}">${x.stock?'Stock: '+x.stock:'Rupture'}</span>
+     <br><br>
+     <button class="btn gold" ${x.stock?'':'disabled'} onclick="addToCart(${x.id})">Ajouter au panier</button>
+     <button class="btn order-btn" ${x.stock?'':'disabled'} onclick="addToCart(${x.id});openCart()">Commander</button>
+   </div>
+ </article>`).join(''):'<div class="empty">Aucun produit trouvé.</div>';
+ updateCount();
 }
-
-/* ---------- CATÉGORIES ---------- */
-
-function setCategory(category){
-
-  document.getElementById("category").value =
-    category;
-
-  renderProducts();
-}
-
-/* ---------- PANIER ---------- */
 
 function addToCart(id){
-
-  const products = getProducts();
-
-  const product =
-    products.find(x => x.id === id);
-
-  if(!product || product.stock <= 0){
-
-    toast("Produit indisponible");
-    return;
-  }
-
-  const cart = getCart();
-
-  const item =
-    cart.find(x => x.id === id);
-
-  if(item){
-
-    if(item.qty >= product.stock){
-
-      toast("Stock maximum atteint");
-      return;
-    }
-
-    item.qty++;
-
-  }else{
-
-    cart.push({
-      id:id,
-      qty:1
-    });
-  }
-
-  saveCart(cart);
-
-  updateCartCount();
-
-  toast("Produit ajouté au panier");
+ const p=products.find(x=>x.id===id);
+ if(!p||p.stock<1)return toast('Produit indisponible');
+ const item=cart.find(x=>x.id===id);
+ if(item){if(item.qty>=p.stock)return toast('Stock maximum atteint');item.qty++}
+ else cart.push({id,qty:1});
+ save();updateCount();toast('Ajouté au panier');
 }
 
-function updateCartCount(){
-
-  const cart = getCart();
-
-  const total =
-    cart.reduce(
-      (sum,item) => sum + item.qty,
-      0
-    );
-
-  document.getElementById("cartCount")
-    .textContent = total;
-}
-
-function openCart(){
-
-  document
-    .getElementById("cartModal")
-    .classList.add("show");
-
-  renderCart();
-}
-
-function closeCart(){
-
-  document
-    .getElementById("cartModal")
-    .classList.remove("show");
-}
+function updateCount(){document.getElementById('cartCount').textContent=cart.reduce((s,x)=>s+x.qty,0)}
+function openCart(){document.getElementById('cartModal').classList.add('show');renderCart()}
+function closeCart(){document.getElementById('cartModal').classList.remove('show')}
 
 function renderCart(){
-
-  const products = getProducts();
-  const cart = getCart();
-
-  const box =
-    document.getElementById("cart");
-
-  if(!cart.length){
-
-    box.innerHTML =
-      '<div class="empty">Votre panier est vide.</div>';
-
-    document.getElementById("total")
-      .textContent = "";
-
-    return;
-  }
-
-  let total = 0;
-
-  box.innerHTML = cart.map(item => {
-
-    const product =
-      products.find(x => x.id === item.id);
-
-    if(!product) return "";
-
-    const subtotal =
-      product.price * item.qty;
-
-    total += subtotal;
-
-    return `
-      <div class="cart-row">
-
-        <div>
-          <b>${product.name}</b><br>
-          <small>${money(product.price)}</small>
-        </div>
-
-        <div class="qty">
-
-          <button
-            onclick="changeQty(${product.id},-1)">
-            −
-          </button>
-
-          ${item.qty}
-
-          <button
-            onclick="changeQty(${product.id},1)">
-            +
-          </button>
-
-        </div>
-
-        <button
-          class="danger"
-          onclick="removeCart(${product.id})">
-          Supprimer
-        </button>
-
-      </div>
-    `;
-
-  }).join("");
-
-  document.getElementById("total")
-    .textContent =
-      "Total : " + money(total);
+ const box=document.getElementById('cart');
+ if(!cart.length){box.innerHTML='<div class="empty">Votre panier est vide.</div>';document.getElementById('total').textContent='';return}
+ let total=0;
+ box.innerHTML=cart.map(a=>{const x=products.find(p=>p.id===a.id);if(!x)return '';total+=x.price*a.qty;return `
+ <div class="cart-row"><div><b>${x.name}</b><br><small>${money(x.price)}</small></div>
+ <div class="qty"><button onclick="changeQty(${x.id},-1)">−</button> ${a.qty} <button onclick="changeQty(${x.id},1)">+</button></div>
+ <button class="danger" onclick="removeCart(${x.id})">Supprimer</button></div>`}).join('');
+ document.getElementById('total').textContent='Total : '+money(total);
 }
 
-function changeQty(id,difference){
-
-  const products = getProducts();
-  const cart = getCart();
-
-  const item =
-    cart.find(x => x.id === id);
-
-  const product =
-    products.find(x => x.id === id);
-
-  if(!item || !product) return;
-
-  item.qty += difference;
-
-  if(item.qty > product.stock){
-
-    item.qty = product.stock;
-
-    toast("Stock maximum atteint");
-  }
-
-  if(item.qty <= 0){
-
-    const index =
-      cart.findIndex(x => x.id === id);
-
-    cart.splice(index,1);
-  }
-
-  saveCart(cart);
-
-  renderCart();
-  updateCartCount();
+function changeQty(id,d){
+ const x=cart.find(a=>a.id===id);if(!x)return;
+ const p=products.find(a=>a.id===id);
+ x.qty+=d;
+ if(p&&x.qty>p.stock)x.qty=p.stock;
+ if(x.qty<=0)cart=cart.filter(a=>a.id!==id);
+ save();renderCart();updateCount();
 }
-
-function removeCart(id){
-
-  const cart = getCart()
-    .filter(x => x.id !== id);
-
-  saveCart(cart);
-
-  renderCart();
-  updateCartCount();
-}
-
-/* ---------- COMMANDE DIRECTE ---------- */
-
-function directOrder(id){
-
-  const products = getProducts();
-
-  const product =
-    products.find(x => x.id === id);
-
-  if(!product || product.stock <= 0){
-
-    toast("Produit indisponible");
-    return;
-  }
-
-  const message =
-    "Bonjour TARBTECH TELECOM,%0A%0A" +
-    "Je souhaite commander :%0A" +
-    product.name +
-    " (" +
-    money(product.price) +
-    ")%0A%0AMerci.";
-
-  window.open(
-    "https://wa.me/22676075658?text=" +
-    message,
-    "_blank"
-  );
-}
-
-/* ---------- COMMANDE PANIER ---------- */
+function removeCart(id){cart=cart.filter(a=>a.id!==id);save();renderCart();updateCount()}
 
 function orderWhatsApp(){
-
-  const cart = getCart();
-
-  if(!cart.length){
-
-    alert("Votre panier est vide.");
-    return;
-  }
-
-  const name =
-    document.getElementById("customer")
-      .value.trim();
-
-  const phone =
-    document.getElementById("phone")
-      .value.trim();
-
-  const address =
-    document.getElementById("address")
-      .value.trim();
-
-  const delivery =
-    document.getElementById("delivery")
-      .value;
-
-  if(!name || !phone){
-
-    alert(
-      "Veuillez renseigner votre nom et votre numéro."
-    );
-
-    return;
-  }
-
-  const products = getProducts();
-
-  let total = 0;
-  let lines = [];
-
-  cart.forEach(item => {
-
-    const product =
-      products.find(x => x.id === item.id);
-
-    if(!product) return;
-
-    const subtotal =
-      product.price * item.qty;
-
-    total += subtotal;
-
-    lines.push(
-      product.name +
-      " x" +
-      item.qty +
-      " = " +
-      money(subtotal)
-    );
-  });
-
-  const order = {
-
-    id:Date.now(),
-
-    date:new Date()
-      .toLocaleString("fr-FR"),
-
-    customer:name,
-
-    phone:phone,
-
-    address:address,
-
-    delivery:delivery,
-
-    items:lines,
-
-    total:total
-  };
-
-  const orders = getOrders();
-
-  orders.unshift(order);
-
-  saveOrders(orders);
-
-  const text =
-    "Bonjour TARBTECH TELECOM,%0A%0A" +
-    "Je souhaite commander.%0A%0A" +
-    "Client : " +
-    encodeURIComponent(name) +
-    "%0A" +
-    "Téléphone : " +
-    encodeURIComponent(phone) +
-    "%0A" +
-    "Mode : " +
-    encodeURIComponent(delivery) +
-    "%0A" +
-    "Lieu : " +
-    encodeURIComponent(
-      address || "À préciser"
-    ) +
-    "%0A%0A" +
-    "Produits :%0A" +
-    encodeURIComponent(
-      lines.join("\n")
-    ) +
-    "%0A%0A" +
-    "Total : " +
-    encodeURIComponent(
-      money(total)
-    );
-
-  window.open(
-    "https://wa.me/22676075658?text=" +
-    text,
-    "_blank"
-  );
+ if(!cart.length){alert('Votre panier est vide.');return}
+ const name=document.getElementById('customer').value.trim();
+ const phone=document.getElementById('phone').value.trim();
+ const addr=document.getElementById('address').value.trim();
+ const del=document.getElementById('delivery').value;
+ if(!name||!phone){alert('Veuillez renseigner votre nom et votre numéro.');return}
+ let total=0;
+ const lines=cart.map(a=>{const x=products.find(p=>p.id===a.id);if(!x)return '';total+=x.price*a.qty;return '- '+x.name+' x'+a.qty+' = '+money(x.price*a.qty)}).filter(Boolean);
+ const orders=JSON.parse(localStorage.getItem(ORDER_KEY)||'[]');
+ orders.unshift({date:new Date().toLocaleString('fr-FR'),customer:name,phone,delivery:del,address:addr,items:lines.join(' | '),total});
+ localStorage.setItem(ORDER_KEY,JSON.stringify(orders));
+ const text='Bonjour TARBTECH TELECOM, je souhaite commander.\nClient: '+name+'\nTél: '+phone+'\n'+del+'\nLieu: '+(addr||'À préciser')+'\nProduits:\n'+lines.join('\n')+'\nTotal: '+money(total);
+ window.open('https://wa.me/22676075658?text='+encodeURIComponent(text),'_blank');
 }
-
-/* ---------- ADMIN ---------- */
 
 function openAdmin(){
-
-  const password =
-    prompt(
-      "Mot de passe administrateur :"
-    );
-
-  if(password !== "tarbtech2026"){
-
-    alert("Mot de passe incorrect.");
-    return;
-  }
-
-  document
-    .getElementById("admin")
-    .classList.add("show");
-
-  renderAdmin();
-
-  document
-    .getElementById("admin")
-    .scrollIntoView({
-      behavior:"smooth"
-    });
+ const pass=prompt('Mot de passe administrateur :');
+ if(pass!=='tarbtech2026'){alert('Mot de passe incorrect.');return}
+ document.getElementById('admin').classList.add('show');
+ renderAdmin();
+ document.getElementById('admin').scrollIntoView({behavior:'smooth'});
 }
-
-function closeAdmin(){
-
-  document
-    .getElementById("admin")
-    .classList.remove("show");
-}
-
+function closeAdmin(){document.getElementById('admin').classList.remove('show')}
 function renderAdmin(){
-
-  const products = getProducts();
-
-  const list =
-    document.getElementById("adminList");
-
-  if(!products.length){
-
-    list.innerHTML =
-      "<p>Aucun produit.</p>";
-
-  }else{
-
-    list.innerHTML =
-      products.map(product => `
-
-        <div class="order-card">
-
-          <b>
-            ${product.icon}
-            ${product.name}
-          </b>
-
-          <br>
-
-          ${money(product.price)}
-          —
-          ${product.category}
-          —
-          Stock : ${product.stock}
-
-          <br><br>
-
-          <button
-            class="danger"
-            onclick="deleteProduct(${product.id})">
-            Supprimer
-          </button>
-
-        </div>
-
-      `).join("");
-  }
-
-  renderOrders();
+ document.getElementById('adminList').innerHTML=products.map(x=>`${x.icon||'📦'} <b>${x.name}</b> — ${money(x.price)} — stock ${x.stock} <button class="danger" onclick="deleteProduct(${x.id})">×</button><br><br>`).join('');
+ const o=JSON.parse(localStorage.getItem(ORDER_KEY)||'[]');
+ document.getElementById('ordersList').innerHTML=o.length?o.map(x=>`<div class="order-card"><b>${x.date}</b><br>${x.customer} — ${x.phone}<br>${x.delivery} — ${x.address||''}<br>${x.items}<br><b>${money(x.total)}</b></div>`).join(''):'Aucune commande sur cet appareil.';
 }
-
-function renderOrders(){
-
-  const orders = getOrders();
-
-  const box =
-    document.getElementById("ordersList");
-
-  if(!orders.length){
-
-    box.innerHTML =
-      "<p>Aucune commande enregistrée sur cet appareil.</p>";
-
-    return;
-  }
-
-  box.innerHTML =
-    orders.map(order => `
-
-      <div class="order-card">
-
-        <b>${order.date}</b><br>
-
-        Client :
-        ${order.customer}<br>
-
-        Téléphone :
-        ${order.phone}<br>
-
-        Mode :
-        ${order.delivery}<br>
-
-        Lieu :
-        ${order.address || "Non précisé"}<br><br>
-
-        <b>Produits :</b><br>
-
-        ${order.items.join("<br>")}
-
-        <br><br>
-
-        <b>
-          Total : ${money(order.total)}
-        </b>
-
-      </div>
-
-    `).join("");
-}
-
-/* ---------- AJOUT PRODUIT ---------- */
-
 function addProduct(){
-
-  const name =
-    document.getElementById("pn")
-      .value.trim();
-
-  const price =
-    Number(
-      document.getElementById("pp").value
-    );
-
-  const category =
-    document.getElementById("pc").value;
-
-  const stock =
-    Number(
-      document.getElementById("ps").value
-    );
-
-  const icon =
-    document.getElementById("pi")
-      .value.trim() || "📦";
-
-  const desc =
-    document.getElementById("pd")
-      .value.trim();
-
-  if(!name || !price){
-
-    alert(
-      "Le nom et le prix sont obligatoires."
-    );
-
-    return;
-  }
-
-  if(stock < 0){
-
-    alert("Le stock ne peut pas être négatif.");
-    return;
-  }
-
-  const products = getProducts();
-
-  products.push({
-
-    id:Date.now(),
-
-    name:name,
-
-    price:price,
-
-    category:category,
-
-    stock:stock,
-
-    icon:icon,
-
-    desc:desc
-  });
-
-  saveProducts(products);
-
-  document.getElementById("pn").value = "";
-  document.getElementById("pp").value = "";
-  document.getElementById("ps").value = "1";
-  document.getElementById("pi").value = "";
-  document.getElementById("pd").value = "";
-
-  renderProducts();
-  renderAdmin();
-
-  toast("Produit ajouté avec succès");
+ const n=document.getElementById('pn').value.trim(), p=Number(document.getElementById('pp').value);
+ const c=document.getElementById('pc').value, s=Number(document.getElementById('ps').value)||0;
+ const i=document.getElementById('pi').value.trim()||'📦', d=document.getElementById('pd').value.trim();
+ if(!n||!p){alert('Nom et prix obligatoires.');return}
+ products.push({id:Date.now(),name:n,price:p,category:c,stock:s,icon:i,desc:d});
+ save();renderProducts();renderAdmin();
+ ['pn','pp','ps','pi','pd'].forEach(id=>document.getElementById(id).value='');
+ document.getElementById('ps').value='1';
+ toast('Produit ajouté.');
 }
-
-/* ---------- SUPPRIMER PRODUIT ---------- */
-
-function deleteProduct(id){
-
-  if(!confirm("Supprimer ce produit ?")){
-    return;
-  }
-
-  let products = getProducts();
-
-  products =
-    products.filter(
-      product => product.id !== id
-    );
-
-  saveProducts(products);
-
-  let cart = getCart();
-
-  cart =
-    cart.filter(
-      item => item.id !== id
-    );
-
-  saveCart(cart);
-
-  renderProducts();
-  renderAdmin();
-
-  toast("Produit supprimé");
-}
-
-/* ---------- RÉINITIALISER ---------- */
-
-function resetProducts(){
-
-  if(!confirm(
-    "Voulez-vous vraiment réinitialiser les produits ?"
-  )){
-    return;
-  }
-
-  saveProducts(
-    defaultProducts.map(
-      product => ({...product})
-    )
-  );
-
-  saveCart([]);
-
-  renderProducts();
-  renderAdmin();
-
-  toast("Produits réinitialisés");
-}
-
-/* ---------- EXPORT COMMANDES ---------- */
-
+function deleteProduct(id){products=products.filter(x=>x.id!==id);cart=cart.filter(x=>x.id!==id);save();renderProducts();renderAdmin()}
+function resetProducts(){products=defaultProducts.map(x=>({...x}));cart=[];save();renderProducts();renderAdmin();toast('Produits réinitialisés.')}
 function exportOrders(){
-
-  const orders = getOrders();
-
-  const file = new Blob(
-    [
-      JSON.stringify(
-        orders,
-        null,
-        2
-      )
-    ],
-    {
-      type:"application/json"
-    }
-  );
-
-  const url =
-    URL.createObjectURL(file);
-
-  const link =
-    document.createElement("a");
-
-  link.href = url;
-
-  link.download =
-    "tarbtech_commandes.json";
-
-  link.click();
-
-  URL.revokeObjectURL(url);
+ const data=localStorage.getItem(ORDER_KEY)||'[]';
+ const a=document.createElement('a');a.href='data:application/json;charset=utf-8,'+encodeURIComponent(data);a.download='tarbtech_commandes.json';a.click();
 }
-
-/* ---------- DÉMARRAGE ---------- */
-
-initializeData();
-
-renderProducts();
-
-updateCartCount();
-
-</script></body>
+save();renderProducts();renderAdmin();
+</script>
+</body>
 </html>
