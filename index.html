@@ -774,7 +774,7 @@ target="_blank">
 <h2>Administration</h2>
 
 <p>
-Gestion des produits et commandes enregistrées sur cet appareil.
+Gestion des produits et commandes. Les produits publiés sont visibles par tous les clients.
 </p>
 
 </div>
@@ -842,7 +842,7 @@ Ajouter le produit
 </button>
 
 <small style="color:#6d6d72">
-Photo enregistrée sur cet appareil.
+Photo publiée avec le produit pour tous les clients.
 </small>
 
 </div>
@@ -965,864 +965,146 @@ Vente • Réparation • Accessoires
 </footer>
 
 <script>
+const PRODUCT_KEY='tarbtech_products_v4',CART_KEY='tarbtech_cart_v4',ORDER_KEY='tarbtech_orders_v4';
+const PRODUCTS_DB_PATH='tarbtech_products';
 
-const PRODUCT_KEY='tarbtech_products_v4',
-CART_KEY='tarbtech_cart_v4',
-ORDER_KEY='tarbtech_orders_v4',
-
-defaultProducts=[
-
-{
-id:1,
-name:'Samsung Galaxy A55',
-price:185000,
-category:'Téléphones',
-icon:'📱',
-stock:3,
-desc:'Smartphone Samsung.'
-},
-
-{
-id:2,
-name:'iPhone 13',
-price:250000,
-category:'Téléphones',
-icon:'📱',
-stock:2,
-desc:'iPhone 13 vérifié.'
-},
-
-{
-id:3,
-name:'Infinix Hot 60i',
-price:95000,
-category:'Téléphones',
-icon:'📱',
-stock:5,
-desc:'Smartphone Infinix.'
-},
-
-{
-id:4,
-name:'Écouteurs Bluetooth',
-price:10000,
-category:'Accessoires',
-icon:'🎧',
-stock:10,
-desc:'Écouteurs sans fil.'
-},
-
-{
-id:5,
-name:'Chargeur rapide',
-price:7500,
-category:'Accessoires',
-icon:'🔌',
-stock:12,
-desc:'Chargeur USB rapide.'
-},
-
-{
-id:6,
-name:'Coque téléphone',
-price:5000,
-category:'Accessoires',
-icon:'📱',
-stock:20,
-desc:'Coques selon modèle.'
-}
-
+const defaultProducts=[
+{id:1,name:'Samsung Galaxy A55',price:185000,category:'Téléphones',icon:'📱',stock:3,desc:'Smartphone Samsung.'},
+{id:2,name:'iPhone 13',price:250000,category:'Téléphones',icon:'📱',stock:2,desc:'iPhone 13 vérifié.'},
+{id:3,name:'Infinix Hot 60i',price:95000,category:'Téléphones',icon:'📱',stock:5,desc:'Smartphone Infinix.'},
+{id:4,name:'Écouteurs Bluetooth',price:10000,category:'Accessoires',icon:'🎧',stock:10,desc:'Écouteurs sans fil.'},
+{id:5,name:'Chargeur rapide',price:7500,category:'Accessoires',icon:'🔌',stock:12,desc:'Chargeur USB rapide.'},
+{id:6,name:'Coque téléphone',price:5000,category:'Accessoires',icon:'📱',stock:20,desc:'Coques selon modèle.'}
 ];
 
-const money=n=>
-Number(n).toLocaleString('fr-FR')+' FCFA';
+let sharedProducts=defaultProducts.map(p=>({...p}));
+let productsReady=false;
+let productsListenerStarted=false;
+
+const money=n=>Number(n).toLocaleString('fr-FR')+' FCFA';
 
 function products(){
-return JSON.parse(
-localStorage.getItem(PRODUCT_KEY)||'null'
-)||[]
+  return Array.isArray(sharedProducts)?sharedProducts:[];
 }
-
-function cart(){
-return JSON.parse(
-localStorage.getItem(CART_KEY)||'[]'
-)
-}
-
-function orders(){
-return JSON.parse(
-localStorage.getItem(ORDER_KEY)||'[]'
-)
-}
-
-function save(k,v){
-localStorage.setItem(k,JSON.stringify(v))
-}
+function cart(){return JSON.parse(localStorage.getItem(CART_KEY)||'[]')}
+function orders(){return JSON.parse(localStorage.getItem(ORDER_KEY)||'[]')}
+function save(k,v){localStorage.setItem(k,JSON.stringify(v))}
 
 function init(){
-
-if(!localStorage.getItem(PRODUCT_KEY)){
-
-let old=JSON.parse(
-localStorage.getItem('tarbtech_products_v3')||'null'
-);
-
-save(
-PRODUCT_KEY,
-Array.isArray(old)&&old.length
-?
-old.map(x=>({
-id:x.id,
-name:x.name||x.n||'Produit',
-price:Number(x.price??x.p??0),
-category:x.category||x.c||'Accessoires',
-icon:x.icon||x.i||'📦',
-stock:Number(x.stock??10),
-desc:x.desc||''
-}))
-:
-defaultProducts
-)
-
-}
-
-if(!localStorage.getItem(CART_KEY))
-save(CART_KEY,[]);
-
-if(!localStorage.getItem(ORDER_KEY))
-save(ORDER_KEY,[])
-
+  if(!localStorage.getItem(CART_KEY))save(CART_KEY,[]);
+  if(!localStorage.getItem(ORDER_KEY))save(ORDER_KEY,[]);
 }
 
 function renderProducts(){
-
-let ps=products(),
-s=document.getElementById('search').value.toLowerCase().trim(),
-c=document.getElementById('category').value;
-
-ps=ps.filter(
-p=>
-(!s||p.name.toLowerCase().includes(s))
-&&
-(!c||p.category===c)
-);
-
-document.getElementById('products').innerHTML=
-ps.length
-?
-ps.map(p=>`
-
-<article class="product">
-
-<div class="pimg">
-
-${
-p.image
-?
-`<img src="${p.image}" alt="${p.name}">`
-:
-p.icon
+  let ps=products(),s=document.getElementById('search').value.toLowerCase().trim(),c=document.getElementById('category').value;
+  ps=ps.filter(p=>(!s||String(p.name||'').toLowerCase().includes(s))&&(!c||p.category===c));
+  document.getElementById('products').innerHTML=ps.length?ps.map(p=>`
+    <article class="product">
+      <div class="pimg">${p.image?`<img src="${p.image}" alt="${p.name}">`:p.icon||'📦'}</div>
+      <div class="pinfo">
+        <span class="tag">${p.category||''}</span>
+        <h3>${p.name||'Produit'}</h3>
+        <div class="price">${money(p.price)}</div>
+        <span class="stock ${p.stock===0?'out':p.stock<=2?'low':''}">${p.stock?'Stock : '+p.stock:'Rupture'}</span>
+        <div class="product-buttons">
+          <button class="btn gold" ${p.stock<=0?'disabled':''} onclick="addToCart(${p.id})">🛒 Ajouter au panier</button>
+          <button class="btn purple-btn" ${p.stock<=0?'disabled':''} onclick="directOrder(${p.id})">💬 Commander direct</button>
+        </div>
+      </div>
+    </article>`).join(''):'<div class="empty">Aucun produit trouvé.</div>';
+  updateCartCount();
 }
-
-</div>
-
-<div class="pinfo">
-
-<span class="tag">
-${p.category}
-</span>
-
-<h3>${p.name}</h3>
-
-<div class="price">
-${money(p.price)}
-</div>
-
-<span class="stock ${
-p.stock===0
-?
-'out'
-:
-p.stock<=2
-?
-'low'
-:
-''
-}">
-
-${
-p.stock
-?
-'Stock : '+p.stock
-:
-'Rupture'
-}
-
-</span>
-
-<div class="product-buttons">
-
-<button
-class="btn gold"
-${p.stock<=0?'disabled':''}
-onclick="addToCart(${p.id})">
-
-🛒 Ajouter au panier
-
-</button>
-
-<button
-class="btn purple-btn"
-${p.stock<=0?'disabled':''}
-onclick="directOrder(${p.id})">
-
-💬 Commander direct
-
-</button>
-
-</div>
-
-</div>
-
-</article>
-
-`).join('')
-
-:
-'<div class="empty">Aucun produit trouvé.</div>';
-
-updateCartCount()
-
-}
-
-function setCategory(c){
-
-document.getElementById('category').value=c;
-
-renderProducts()
-
-}
-
-function addToCart(id){
-
-let p=products().find(x=>x.id===id),
-c=cart();
-
-if(!p||p.stock<=0)
-return alert('Produit indisponible.');
-
-let i=c.find(x=>x.id===id);
-
-if(i){
-
-if(i.qty>=p.stock)
-return alert('Stock maximum atteint.');
-
-i.qty++
-
-}
-else
-c.push({id,qty:1});
-
-save(CART_KEY,c);
-
-updateCartCount()
-
-}
-
-function updateCartCount(){
-
-document.getElementById('cartCount').textContent=
-cart().reduce((s,x)=>s+x.qty,0)
-
-}
-
-function openCart(){
-
-document
-.getElementById('cartModal')
-.classList.add('show');
-
-renderCart()
-
-}
-
-function closeCart(){
-
-document
-.getElementById('cartModal')
-.classList.remove('show')
-
-}
-
-function renderCart(){
-
-let ps=products(),
-c=cart(),
-t=0,
-b=document.getElementById('cart');
-
-if(!c.length){
-
-b.innerHTML=
-'<div class="empty">Votre panier est vide.</div>';
-
-document.getElementById('total').textContent='';
-
-return
-
-}
-
-b.innerHTML=c.map(i=>{
-
-let p=ps.find(x=>x.id===i.id);
-
-if(!p)return'';
-
-t+=p.price*i.qty;
-
-return`
-
-<div class="cart-row">
-
-<div>
-
-<b>${p.name}</b>
-
-<br>
-
-<small>
-${money(p.price)}
-</small>
-
-</div>
-
-<div class="qty">
-
-<button onclick="changeQty(${p.id},-1)">
-−
-</button>
-
-${i.qty}
-
-<button onclick="changeQty(${p.id},1)">
-+
-</button>
-
-</div>
-
-<button
-class="danger"
-onclick="removeCart(${p.id})">
-
-Supprimer
-
-</button>
-
-</div>
-
-`
-
-}).join('');
-
-document.getElementById('total').textContent=
-'Total : '+money(t)
-
-}
-
-function changeQty(id,d){
-
-let c=cart(),
-p=products().find(x=>x.id===id),
-i=c.find(x=>x.id===id);
-
-if(!i||!p)return;
-
-i.qty+=d;
-
-if(i.qty>p.stock)
-i.qty=p.stock;
-
-if(i.qty<=0)
-c=c.filter(x=>x.id!==id);
-
-save(CART_KEY,c);
-
-renderCart();
-
-updateCartCount()
-
-}
-
-function removeCart(id){
-
-save(
-CART_KEY,
-cart().filter(x=>x.id!==id)
-);
-
-renderCart();
-
-updateCartCount()
-
-}
-
-function directOrder(id){
-
-let p=products().find(x=>x.id===id);
-
-if(!p||p.stock<=0)return;
-
-window.open(
-'https://wa.me/22676075658?text='+
-encodeURIComponent(
-'Bonjour TARBTECH TELECOM, je souhaite commander : '+
-p.name+' — '+money(p.price)+'.'
-),
-'_blank'
-)
-
-}
-
-function orderWhatsApp(){
-
-let c=cart();
-
-if(!c.length)
-return alert('Votre panier est vide.');
-
-let name=
-document.getElementById('customer').value.trim();
-
-let phone=
-document.getElementById('phone').value.trim();
-
-let address=
-document.getElementById('address').value.trim();
-
-let delivery=
-document.getElementById('delivery').value;
-
-if(!name||!phone)
-return alert(
-'Veuillez renseigner votre nom et votre numéro.'
-);
-
-let ps=products(),
-total=0,
-lines=[];
-
-c.forEach(i=>{
-
-let p=ps.find(x=>x.id===i.id);
-
-if(p){
-
-total+=p.price*i.qty;
-
-lines.push(
-p.name+' x'+i.qty+
-' = '+money(p.price*i.qty)
-)
-
-}
-
-});
-
-let os=orders();
-
-os.unshift({
-
-id:Date.now(),
-date:new Date().toLocaleString('fr-FR'),
-customer:name,
-phone,
-address,
-delivery,
-items:lines,
-total
-
-});
-
-save(ORDER_KEY,os);
-
-let text=
-'Bonjour TARBTECH TELECOM,\n'+
-'Je souhaite commander.\n\n'+
-'Client : '+name+'\n'+
-'Téléphone : '+phone+'\n'+
-'Mode : '+delivery+'\n'+
-'Lieu : '+(address||'À préciser')+
-'\n\nProduits :\n'+
-lines.join('\n')+
-'\n\nTotal : '+money(total);
-
-save(CART_KEY,[]);
-
-closeCart();
-
-updateCartCount();
-
-window.open(
-'https://wa.me/22676075658?text='+
-encodeURIComponent(text),
-'_blank'
-)
-
-}
-
-function openAdmin(){
-
-if(
-prompt('Mot de passe administrateur :')
-!=='tarbtech2026'
-)
-return alert('Mot de passe incorrect.');
-
-document
-.getElementById('admin')
-.classList.add('show');
-
-renderAdmin();
-
-document
-.getElementById('admin')
-.scrollIntoView({
-behavior:'smooth'
-})
-
-}
-
-function closeAdmin(){
-
-document
-.getElementById('admin')
-.classList.remove('show')
-
-}
-
-function renderAdmin(){
-
-document.getElementById('adminList').innerHTML=
-products().map(p=>`
-
-<div class="order-card">
-
-<div
-style="display:flex;gap:10px;align-items:center">
-
-<div
-style="width:55px;height:55px;background:#eee;border-radius:8px;display:flex;align-items:center;justify-content:center;overflow:hidden">
-
-${
-p.image
-?
-`<img src="${p.image}" alt="" style="width:100%;height:100%;object-fit:contain">`
-:
-p.icon
-}
-
-</div>
-
-<b>${p.name}</b>
-
-</div>
-
-<br>
-
-${money(p.price)}
-—
-${p.category}
-—
-Stock : ${p.stock}
-
-<br><br>
-
-<button
-class="danger"
-onclick="deleteProduct(${p.id})">
-
-Supprimer
-
-</button>
-
-</div>
-
-`).join('')
-
-||
-'<p>Aucun produit.</p>';
-
-let os=orders();
-
-document.getElementById('ordersList').innerHTML=
-os.length
-?
-os.map(o=>`
-
-<div class="order-card">
-
-<b>${o.date}</b>
-
-<br>
-
-Client : ${o.customer}
-
-<br>
-
-Téléphone : ${o.phone}
-
-<br>
-
-Mode : ${o.delivery}
-
-<br>
-
-Lieu : ${o.address||'Non précisé'}
-
-<br><br>
-
-${o.items.join('<br>')}
-
-<br><br>
-
-<b>
-Total : ${money(o.total)}
-</b>
-
-</div>
-
-`).join('')
-
-:
-'<p>Aucune commande enregistrée sur cet appareil.</p>'
-
-}
-
-async function resizeImage(file){
-
-return new Promise((resolve,reject)=>{
-
-if(!file)
-return resolve('');
-
-let r=new FileReader();
-
-r.onload=e=>{
-
-let img=new Image();
-
-img.onload=()=>{
-
-let max=900,
-w=img.width,
-h=img.height;
-
-if(w>max){
-
-h=Math.round(h*max/w);
-w=max
-
-}
-
-let c=document.createElement('canvas');
-
-c.width=w;
-c.height=h;
-
-c.getContext('2d')
-.drawImage(img,0,0,w,h);
-
-resolve(
-c.toDataURL(
-'image/jpeg',
-0.82
-)
-)
-
-};
-
-img.onerror=reject;
-
-img.src=e.target.result
-
-};
-
-r.onerror=reject;
-
-r.readAsDataURL(file)
-
-})
-
-}
+function setCategory(c){document.getElementById('category').value=c;renderProducts()}
+function addToCart(id){let p=products().find(x=>x.id===id),c=cart();if(!p||p.stock<=0)return alert('Produit indisponible.');let i=c.find(x=>x.id===id);if(i){if(i.qty>=p.stock)return alert('Stock maximum atteint.');i.qty++}else c.push({id,qty:1});save(CART_KEY,c);updateCartCount()}
+function updateCartCount(){document.getElementById('cartCount').textContent=cart().reduce((s,x)=>s+x.qty,0)}
+function openCart(){document.getElementById('cartModal').classList.add('show');renderCart()}
+function closeCart(){document.getElementById('cartModal').classList.remove('show')}
+function renderCart(){let ps=products(),c=cart(),t=0,b=document.getElementById('cart');if(!c.length){b.innerHTML='<div class="empty">Votre panier est vide.</div>';document.getElementById('total').textContent='';return}b.innerHTML=c.map(i=>{let p=ps.find(x=>x.id===i.id);if(!p)return'';t+=p.price*i.qty;return `<div class="cart-row"><div><b>${p.name}</b><br><small>${money(p.price)}</small></div><div class="qty"><button onclick="changeQty(${p.id},-1)">−</button>${i.qty}<button onclick="changeQty(${p.id},1)">+</button></div><button class="danger" onclick="removeCart(${p.id})">Supprimer</button></div>`}).join('');document.getElementById('total').textContent='Total : '+money(t)}
+function changeQty(id,d){let c=cart(),p=products().find(x=>x.id===id),i=c.find(x=>x.id===id);if(!i||!p)return;i.qty+=d;if(i.qty>p.stock)i.qty=p.stock;if(i.qty<=0)c=c.filter(x=>x.id!==id);save(CART_KEY,c);renderCart();updateCartCount()}
+function removeCart(id){save(CART_KEY,cart().filter(i=>i.id!==id));renderCart();updateCartCount()}
+function directOrder(id){let p=products().find(x=>x.id===id);if(!p||p.stock<=0)return;window.open('https://wa.me/22676075658?text='+encodeURIComponent('Bonjour TARBTECH TELECOM, je souhaite commander : '+p.name+' — '+money(p.price)+'.'),'_blank')}
+function orderWhatsApp(){let c=cart();if(!c.length)return alert('Votre panier est vide.');let name=document.getElementById('customer').value.trim(),phone=document.getElementById('phone').value.trim(),address=document.getElementById('address').value.trim(),delivery=document.getElementById('delivery').value;if(!name||!phone)return alert('Veuillez renseigner votre nom et votre numéro.');let ps=products(),total=0,lines=[];c.forEach(i=>{let p=ps.find(x=>x.id===i.id);if(p){total+=p.price*i.qty;lines.push(p.name+' x'+i.qty+' = '+money(p.price*i.qty))}});let os=orders();os.unshift({id:Date.now(),date:new Date().toLocaleString('fr-FR'),customer:name,phone,address,delivery,items:lines,total});save(ORDER_KEY,os);save(CART_KEY,[]);closeCart();updateCartCount();window.open('https://wa.me/22676075658?text='+encodeURIComponent('Bonjour TARBTECH TELECOM,\nJe souhaite commander.\n\nClient : '+name+'\nTéléphone : '+phone+'\nMode : '+delivery+'\nLieu : '+(address||'À préciser')+'\n\nProduits :\n'+lines.join('\n')+'\n\nTotal : '+money(total)),'_blank')}
+
+function openAdmin(){if(prompt('Mot de passe administrateur :')!=='tarbtech2026')return alert('Mot de passe incorrect.');document.getElementById('admin').classList.add('show');renderAdmin();document.getElementById('admin').scrollIntoView({behavior:'smooth'})}
+function closeAdmin(){document.getElementById('admin').classList.remove('show')}
+function renderAdmin(){document.getElementById('adminList').innerHTML=products().map(p=>`<div class="order-card"><div style="display:flex;gap:10px;align-items:center"><div style="width:55px;height:55px;background:#eee;border-radius:8px;display:flex;align-items:center;justify-content:center;overflow:hidden">${p.image?`<img src="${p.image}" alt="" style="width:100%;height:100%;object-fit:contain">`:p.icon||'📦'}</div><b>${p.name}</b></div><br>${money(p.price)} — ${p.category} — Stock : ${p.stock}<br><br><button class="danger" onclick="deleteProduct(${p.id})">Supprimer</button></div>`).join('')||'<p>Aucun produit.</p>';let os=orders();document.getElementById('ordersList').innerHTML=os.length?os.map(o=>`<div class="order-card"><b>${o.date}</b><br>Client : ${o.customer}<br>Téléphone : ${o.phone}<br>Mode : ${o.delivery}<br>Lieu : ${o.address||'Non précisé'}<br><br>${o.items.join('<br>')}<br><br><b>Total : ${money(o.total)}</b></div>`).join(''):'<p>Aucune commande enregistrée sur cet appareil.</p>'}
+
+async function resizeImage(file){return new Promise((resolve,reject)=>{if(!file)return resolve('');let r=new FileReader();r.onload=e=>{let img=new Image();img.onload=()=>{let max=700,w=img.width,h=img.height;if(w>max){h=Math.round(h*max/w);w=max}let c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);resolve(c.toDataURL('image/jpeg',0.72))};img.onerror=reject;r.onerror=reject;r.readAsDataURL(file)});}
 
 async function addProduct(){
-
-let file=
-document.getElementById('pimg')
-.files[0];
-
-let p={
-
-id:Date.now(),
-
-name:
-document.getElementById('pn')
-.value.trim(),
-
-price:
-Number(
-document.getElementById('pp')
-.value
-),
-
-category:
-document.getElementById('pc')
-.value,
-
-stock:
-Number(
-document.getElementById('ps')
-.value
-),
-
-icon:
-document.getElementById('pi')
-.value.trim()||'📦',
-
-desc:
-document.getElementById('pd')
-.value.trim(),
-
-image:''
-
-};
-
-if(!p.name||!p.price)
-return alert(
-'Le nom et le prix sont obligatoires.'
-);
-
-let saveProduct=()=>{
-
-let ps=products();
-
-ps.push(p);
-
-save(PRODUCT_KEY,ps);
-
-renderProducts();
-
-renderAdmin();
-
-document.getElementById('pn').value='';
-document.getElementById('pp').value='';
-document.getElementById('ps').value='1';
-document.getElementById('pi').value='';
-document.getElementById('pd').value='';
-document.getElementById('pimg').value='';
-
-alert('Produit ajouté.');
-
-};
-
-if(file){
-
-if(file.size>1500000)
-return alert(
-'Photo trop lourde. Choisissez une image de moins de 1,5 Mo.'
-);
-
-let r=new FileReader();
-
-r.onload=()=>{
-p.image=r.result;
-saveProduct()
-};
-
-r.readAsDataURL(file)
-
-}
-else
-saveProduct()
-
+  let file=document.getElementById('pimg').files[0]||document.getElementById('pimage').files[0];
+  let p={id:Date.now(),name:document.getElementById('pn').value.trim(),price:Number(document.getElementById('pp').value),category:document.getElementById('pc').value,stock:Number(document.getElementById('ps').value),icon:document.getElementById('pi').value.trim()||'📦',desc:document.getElementById('pd').value.trim(),image:''};
+  if(!p.name||!p.price)return alert('Le nom et le prix sont obligatoires.');
+  if(p.stock<0||!Number.isFinite(p.stock))return alert('Stock invalide.');
+  try{
+    if(file){if(file.size>2500000)return alert('Photo trop lourde. Choisissez une image de moins de 2,5 Mo.');p.image=await resizeImage(file)}
+    const db=window.tarbtechDB;
+    if(!db)return alert('Firebase n’est pas encore prêt. Réessayez dans quelques secondes.');
+    const snap=await db.ref(PRODUCTS_DB_PATH).once('value');
+    let ps=snap.val();
+    ps=Array.isArray(ps)?ps:Object.values(ps||{});
+    ps.push(p);
+    await db.ref(PRODUCTS_DB_PATH).set(ps);
+    alert('Produit publié pour tous les clients.');
+    document.getElementById('pn').value='';document.getElementById('pp').value='';document.getElementById('ps').value='1';document.getElementById('pi').value='';document.getElementById('pd').value='';document.getElementById('pimg').value='';document.getElementById('pimage').value='';
+  }catch(e){console.error(e);alert('Impossible de publier le produit. Vérifiez la connexion Firebase et les règles de la base de données.')}
 }
 
-function deleteProduct(id){
-
-if(!confirm('Supprimer ce produit ?'))
-return;
-
-save(
-PRODUCT_KEY,
-products().filter(p=>p.id!==id)
-);
-
-save(
-CART_KEY,
-cart().filter(i=>i.id!==id)
-);
-
-renderProducts();
-
-renderAdmin()
-
-}
-
-function resetProducts(){
-
-if(
-!confirm(
-'Voulez-vous vraiment réinitialiser les produits ?'
-)
-)
-return;
-
-save(
-PRODUCT_KEY,
-defaultProducts.map(p=>({...p}))
-);
-
-save(CART_KEY,[]);
-
-renderProducts();
-
-renderAdmin()
-
-}
-
-function exportOrders(){
-
-let a=document.createElement('a');
-
-a.href=URL.createObjectURL(
-new Blob(
-[
-JSON.stringify(
-orders(),
-null,
-2
-)
-],
-{
-type:'application/json'
-}
-)
-);
-
-a.download='tarbtech_commandes.json';
-
-a.click()
-
-}
+async function deleteProduct(id){if(!confirm('Supprimer ce produit pour tous les clients ?'))return;try{const db=window.tarbtechDB;const snap=await db.ref(PRODUCTS_DB_PATH).once('value');let ps=Object.values(snap.val()||{}).filter(p=>Number(p.id)!==Number(id));await db.ref(PRODUCTS_DB_PATH).set(ps);save(CART_KEY,cart().filter(i=>i.id!==id));alert('Produit supprimé pour tous les clients.')}catch(e){console.error(e);alert('Erreur lors de la suppression.')} }
+async function resetProducts(){if(!confirm('Voulez-vous vraiment réinitialiser les produits pour tous les clients ?'))return;try{await window.tarbtechDB.ref(PRODUCTS_DB_PATH).set(defaultProducts.map(p=>({...p})));save(CART_KEY,[]);alert('Produits réinitialisés.')}catch(e){console.error(e);alert('Erreur lors de la réinitialisation.')}}
+function exportOrders(){let a=document.createElement('a');a.href=URL.createObjectURL(new Blob([JSON.stringify(orders(),null,2)],{type:'application/json'}));a.download='tarbtech_commandes.json';a.click()}
 
 init();
-
 renderProducts();
-
 updateCartCount();
 
+/* Connexion Firebase pour partager les produits avec tous les visiteurs */
+window.addEventListener('tarbtechFirebaseReady',async()=>{
+  if(productsListenerStarted)return;
+  productsListenerStarted=true;
+  const db=window.tarbtechDB;
+  try{
+    const local=JSON.parse(localStorage.getItem(PRODUCT_KEY)||'null');
+    const snap=await db.ref(PRODUCTS_DB_PATH).once('value');
+    if(!snap.exists()){
+      const seed=Array.isArray(local)&&local.length?local:defaultProducts;
+      await db.ref(PRODUCTS_DB_PATH).set(seed);
+    }
+    db.ref(PRODUCTS_DB_PATH).on('value',s=>{
+      const val=s.val();
+      sharedProducts=Array.isArray(val)?val:Object.values(val||{});
+      productsReady=true;
+      save(PRODUCT_KEY,sharedProducts);
+      renderProducts();
+      if(document.getElementById('admin').classList.contains('show'))renderAdmin();
+      if(document.getElementById('cartModal').classList.contains('show'))renderCart();
+    },e=>console.error('Produits Firebase:',e));
+  }catch(e){console.error('Initialisation produits:',e)}
+});
 </script>
+</script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+<script>
+(function(){
+  const firebaseConfig={
+    apiKey:"AIzaSyAhSS1VEPKumgegg_tB86VSTTLC0g1OAXg",
+    authDomain:"tarbtech-telecom.firebaseapp.com",
+    databaseURL:"https://tarbtech-telecom-default-rtdb.firebaseio.com",
+    projectId:"tarbtech-telecom",
+    storageBucket:"tarbtech-telecom.firebasestorage.app",
+    messagingSenderId:"498893630122",
+    appId:"1:498893630122:web:5bfef4b1c18ade36423ed3"
+  };
+  try{
+    if(!firebase.apps.length)firebase.initializeApp(firebaseConfig);
+    window.tarbtechDB=firebase.database();
+    window.dispatchEvent(new Event('tarbtechFirebaseReady'));
+  }catch(e){console.error('Firebase produits:',e)}
+})();
+</script>
+
 <!-- =========================================================
      TARBTECH TELECOM — STATISTIQUES FIREBASE
      Visites • En ligne • J'aime • Je n'aime pas
@@ -1866,7 +1148,7 @@ function startTartechStats() {
 
   try {
 
-    firebase.initializeApp(firebaseConfig);
+    if (!firebase.apps.length) firebase.initializeApp(firebaseConfig);
     statsDB = firebase.database();
 
     firebase.auth().signInAnonymously().then(() => {
