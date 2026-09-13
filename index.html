@@ -120,7 +120,8 @@ footer{margin-top:40px;background:#111827;color:#fff;padding:25px 5%;text-align:
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 import { getDatabase, ref, push, set, onValue, update, remove, increment, get }
 from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
-
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged }
+from "https://www.gstatic.com/firebasejs/12.1.0/firebase-auth.js";
 /* ==========================================================
    IMPORTANT : REMPLACE UNIQUEMENT LES VALEURS CI-DESSOUS
    PAR LA CONFIGURATION WEB DE TON PROJET FIREBASE.
