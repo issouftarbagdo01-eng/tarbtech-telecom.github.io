@@ -817,15 +817,7 @@ placeholder="Emoji (ex: 📱)">
 📷 Photo du produit
 </label>
 
-<input
-id="pimg"
-type="file"
-accept="image/*">
-
-<input
-id="pimage"
-type="file"
-accept="image/*">
+<input id="pimg" type="file" accept="image/*">
 
 <small style="color:#6d6d72">
 📷 Choisissez la photo du produit depuis votre téléphone.
@@ -1025,15 +1017,22 @@ function removeCart(id){save(CART_KEY,cart().filter(i=>i.id!==id));renderCart();
 function directOrder(id){let p=products().find(x=>x.id===id);if(!p||p.stock<=0)return;window.open('https://wa.me/22676075658?text='+encodeURIComponent('Bonjour TARBTECH TELECOM, je souhaite commander : '+p.name+' — '+money(p.price)+'.'),'_blank')}
 function orderWhatsApp(){let c=cart();if(!c.length)return alert('Votre panier est vide.');let name=document.getElementById('customer').value.trim(),phone=document.getElementById('phone').value.trim(),address=document.getElementById('address').value.trim(),delivery=document.getElementById('delivery').value;if(!name||!phone)return alert('Veuillez renseigner votre nom et votre numéro.');let ps=products(),total=0,lines=[];c.forEach(i=>{let p=ps.find(x=>x.id===i.id);if(p){total+=p.price*i.qty;lines.push(p.name+' x'+i.qty+' = '+money(p.price*i.qty))}});let os=orders();os.unshift({id:Date.now(),date:new Date().toLocaleString('fr-FR'),customer:name,phone,address,delivery,items:lines,total});save(ORDER_KEY,os);save(CART_KEY,[]);closeCart();updateCartCount();window.open('https://wa.me/22676075658?text='+encodeURIComponent('Bonjour TARBTECH TELECOM,\nJe souhaite commander.\n\nClient : '+name+'\nTéléphone : '+phone+'\nMode : '+delivery+'\nLieu : '+(address||'À préciser')+'\n\nProduits :\n'+lines.join('\n')+'\n\nTotal : '+money(total)),'_blank')}
 
-function openAdmin(){if(prompt('Mot de passe administrateur :')!=='tarbtech2026')return alert('Mot de passe incorrect.');document.getElementById('admin').classList.add('show');renderAdmin();document.getElementById('admin').scrollIntoView({behavior:'smooth'})}
+function openAdmin(){
+  const pass=prompt('Mot de passe administrateur :');
+  if(pass===null)return;
+  if(pass!=='tarbtech2026'){alert('Mot de passe incorrect.');return;}
+  document.getElementById('admin').classList.add('show');
+  renderAdmin();
+  document.getElementById('admin').scrollIntoView({behavior:'smooth'});
+}
 function closeAdmin(){document.getElementById('admin').classList.remove('show')}
 function renderAdmin(){document.getElementById('adminList').innerHTML=products().map(p=>`<div class="order-card"><div style="display:flex;gap:10px;align-items:center"><div style="width:55px;height:55px;background:#eee;border-radius:8px;display:flex;align-items:center;justify-content:center;overflow:hidden">${p.image?`<img src="${p.image}" alt="" style="width:100%;height:100%;object-fit:contain">`:p.icon||'📦'}</div><b>${p.name}</b></div><br>${money(p.price)} — ${p.category} — Stock : ${p.stock}<br><br><button class="danger" onclick="deleteProduct(${p.id})">Supprimer</button></div>`).join('')||'<p>Aucun produit.</p>';let os=orders();document.getElementById('ordersList').innerHTML=os.length?os.map(o=>`<div class="order-card"><b>${o.date}</b><br>Client : ${o.customer}<br>Téléphone : ${o.phone}<br>Mode : ${o.delivery}<br>Lieu : ${o.address||'Non précisé'}<br><br>${o.items.join('<br>')}<br><br><b>Total : ${money(o.total)}</b></div>`).join(''):'<p>Aucune commande enregistrée sur cet appareil.</p>'}
 
 async function resizeImage(file){return new Promise((resolve,reject)=>{if(!file)return resolve('');let r=new FileReader();r.onload=e=>{let img=new Image();img.onload=()=>{let max=700,w=img.width,h=img.height;if(w>max){h=Math.round(h*max/w);w=max}let c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);resolve(c.toDataURL('image/jpeg',0.72))};img.onerror=reject;r.onerror=reject;r.readAsDataURL(file)});}
 
 async function addProduct(){
-  let imageInput=document.getElementById('pimg');
-  let file=imageInput && imageInput.files ? imageInput.files[0] : null;
+  const input=document.getElementById('pimg');
+   let file=input&&input.files&&input.files[0] ? input.files[0] : null;
   let p={id:Date.now(),name:document.getElementById('pn').value.trim(),price:Number(document.getElementById('pp').value),category:document.getElementById('pc').value,stock:Number(document.getElementById('ps').value),icon:document.getElementById('pi').value.trim()||'📦',desc:document.getElementById('pd').value.trim(),image:''};
   if(!p.name||!p.price)return alert('Le nom et le prix sont obligatoires.');
   if(p.stock<0||!Number.isFinite(p.stock))return alert('Stock invalide.');
@@ -1047,10 +1046,8 @@ async function addProduct(){
     ps.push(p);
     await db.ref(PRODUCTS_DB_PATH).set(ps);
     alert('Produit publié pour tous les clients.');
-    document.getElementById('pn').value='';document.getElementById('pp').value='';document.getElementById('ps').value='1';document.getElementById('pi').value='';document.getElementById('pd').value='';if(imageInput)imageInput.value='';
-  }catch(e){console.error(e);alert('Impossible de publier le produit.
-
-Détail : '+(e && e.message ? e.message : e));}
+    document.getElementById('pn').value='';document.getElementById('pp').value='';document.getElementById('ps').value='1';document.getElementById('pi').value='';document.getElementById('pd').value='';if(document.getElementById('pimg'))document.getElementById('pimg').value='';
+  }catch(e){console.error(e);alert('Impossible de publier le produit. Vérifiez la connexion Firebase et les règles de la base de données.')}
 }
 
 async function deleteProduct(id){if(!confirm('Supprimer ce produit pour tous les clients ?'))return;try{const db=window.tarbtechDB;const snap=await db.ref(PRODUCTS_DB_PATH).once('value');let ps=Object.values(snap.val()||{}).filter(p=>Number(p.id)!==Number(id));await db.ref(PRODUCTS_DB_PATH).set(ps);save(CART_KEY,cart().filter(i=>i.id!==id));alert('Produit supprimé pour tous les clients.')}catch(e){console.error(e);alert('Erreur lors de la suppression.')} }
@@ -1397,7 +1394,7 @@ setInterval(() => {
     measurementId: "G-HNSM9PZCQ9"
   };
 
-  const app = initializeApp(firebaseConfig, 'stats-module');
+  const app = initializeApp(firebaseConfig);
   getAnalytics(app);
 
   const db = getDatabase(
