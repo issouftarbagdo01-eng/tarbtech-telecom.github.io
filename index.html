@@ -315,13 +315,22 @@ window.deleteProduct=async function(id){
   if(confirm("Supprimer ce produit ?")) await remove(ref(db,"products/"+id));
 };
 
-window.openAdmin=function(){
-  const code=prompt("Code Admin :");
-  /* CHANGE CE CODE avant la mise en ligne. */
-  if(code==="TARBTECH2026"){
+window.openAdmin=async function(){
+  const email=prompt("E-mail administrateur :");
+  if(!email) return;
+
+  const password=prompt("Mot de passe :");
+  if(!password) return;
+
+  try{
+    await signInWithEmailAndPassword(auth,email,password);
+
     document.getElementById("admin").style.display="block";
     document.getElementById("admin").scrollIntoView({behavior:"smooth"});
-  }else if(code!==null) alert("Code incorrect.");
+
+  }catch(error){
+    alert("Connexion impossible : "+error.message);
+  }
 };
 window.closeAdmin=function(){document.getElementById("admin").style.display="none"};
 </script>
