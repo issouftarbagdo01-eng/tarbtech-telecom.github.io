@@ -1823,6 +1823,276 @@ renderProducts();
 updateCartCount();
 
 </script>
+<!-- =========================================================
+     TARBTECH TELECOM — STATISTIQUES FIREBASE
+     Visites • En ligne • J'aime • Je n'aime pas
+     ========================================================= -->
 
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
+
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyAhSS1VEPKumgegg_tB86VSTTLC0g1OAXg",
+  authDomain: "tarbtech-telecom.firebaseapp.com",
+  databaseURL: "https://tarbtech-telecom-default-rtdb.firebaseio.com",
+  projectId: "tarbtech-telecom",
+  storageBucket: "tarbtech-telecom.firebasestorage.app",
+  messagingSenderId: "498893630122",
+  appId: "1:498893630122:web:5bfef4b1c18ade36423ed3",
+  measurementId: "G-HNSM9PZCQ9"
+};
+
+let statsDB = null;
+let statsReady = false;
+let presenceRef = null;
+
+const visitorId =
+  localStorage.getItem('tarbtech_visitor_id') ||
+  ('v_' + Date.now().toString(36) + '_' +
+   Math.random().toString(36).slice(2,10));
+
+localStorage.setItem('tarbtech_visitor_id', visitorId);
+
+function setStat(id, value) {
+  const el = document.getElementById(id);
+  if (el) {
+    el.textContent = Number(value || 0).toLocaleString('fr-FR');
+  }
+}
+
+function startTartechStats() {
+
+  try {
+
+    firebase.initializeApp(firebaseConfig);
+    statsDB = firebase.database();
+
+    firebase.auth().signInAnonymously().then(() => {
+
+      statsReady = true;
+
+      /* Compteur des visites */
+      const visitsRef = statsDB.ref('tarbtech_stats/visits');
+
+      visitsRef.transaction(value => {
+        return (Number(value) || 0) + 1;
+      });
+
+      /* Visiteur actuellement en ligne */
+      presenceRef =
+        statsDB.ref('tarbtech_stats/online/' + visitorId);
+
+      presenceRef.set({
+        connectedAt:
+          firebase.database.ServerValue.TIMESTAMP
+      });
+
+      presenceRef.onDisconnect().remove();
+
+      /* Affichage des statistiques en temps réel */
+      visitsRef.on('value', snap => {
+        setStat('visitCount', snap.val());
+      });
+
+      statsDB.ref('tarbtech_stats/likes').on('value', snap => {
+        setStat('likeCount', snap.val());
+      });
+
+      statsDB.ref('tarbtech_stats/dislikes').on('value', snap => {
+        setStat('dislikeCount', snap.val());
+      });
+
+      statsDB.ref('tarbtech_stats/online').on('value', snap => {
+
+        let count = 0;
+
+        snap.forEach(() => {
+          count++;
+        });
+
+        setStat('onlineCount', count);
+      });
+
+      /* J'aime */
+      const likeButton =
+        document.getElementById('tarbtechLike');
+
+      if (likeButton) {
+
+        likeButton.onclick = () => {
+
+          if (localStorage.getItem('tarbtech_voted')) {
+            alert('Vous avez déjà voté.');
+            return;
+          }
+
+          statsDB.ref('tarbtech_stats/likes')
+            .transaction(value => {
+              return (Number(value) || 0) + 1;
+            });
+
+          localStorage.setItem('tarbtech_voted', 'like');
+
+          alert('Merci pour votre J’aime 👍');
+        };
+      }
+
+      /* Je n'aime pas */
+      const dislikeButton =
+        document.getElementById('tarbtechDislike');
+
+      if (dislikeButton) {
+
+        dislikeButton.onclick = () => {
+
+          if (localStorage.getItem('tarbtech_voted')) {
+            alert('Vous avez déjà voté.');
+            return;
+          }
+
+          statsDB.ref('tarbtech_stats/dislikes')
+            .transaction(value => {
+              return (Number(value) || 0) + 1;
+            });
+
+          localStorage.setItem('tarbtech_voted', 'dislike');
+
+          alert('Merci pour votre avis.');
+        };
+      }
+
+    }).catch(error => {
+      console.error('Firebase Auth:', error);
+    });
+
+  } catch (error) {
+    console.error('Firebase:', error);
+  }
+}
+
+startTartechStats();
+
+/* Maintien de la présence en ligne */
+setInterval(() => {
+
+  if (
+    presenceRef &&
+    document.visibilityState === 'visible'
+  ) {
+
+    presenceRef.set({
+      connectedAt:
+        firebase.database.ServerValue.TIMESTAMP
+    });
+
+  }
+
+}, 30000);
+
+</script>
+
+<!-- =========================================================
+     COMPTEUR AFFICHÉ EN HAUT À DROITE
+     ========================================================= -->
+
+<style>
+
+.tartech-stats {
+  position: fixed;
+  top: 12px;
+  right: 12px;
+  z-index: 9999;
+
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+
+  background: rgba(20,20,24,.95);
+  color: white;
+
+  padding: 10px;
+  border-radius: 12px;
+
+  box-shadow: 0 5px 20px rgba(0,0,0,.25);
+
+  font-family: Arial,sans-serif;
+  font-size: 13px;
+}
+
+.tartech-stat {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-width: 130px;
+}
+
+.tartech-stat span {
+  font-weight: 800;
+}
+
+.tartech-vote {
+  border: 0;
+  border-radius: 7px;
+  padding: 4px 7px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+@media(max-width:600px) {
+
+  .tartech-stats {
+    top: 8px;
+    right: 8px;
+    font-size: 11px;
+    padding: 7px;
+  }
+
+  .tartech-stat {
+    min-width: 105px;
+  }
+
+}
+
+</style>
+
+<div class="tartech-stats">
+
+  <div class="tartech-stat">
+    <span>👁️ Visites</span>
+    <span id="visitCount">0</span>
+  </div>
+
+  <div class="tartech-stat">
+    <span>🟢 En ligne</span>
+    <span id="onlineCount">0</span>
+  </div>
+
+  <div class="tartech-stat">
+    <span>👍 J'aime</span>
+    <button
+      id="tarbtechLike"
+      class="tartech-vote">
+      👍
+    </button>
+    <span id="likeCount">0</span>
+  </div>
+
+  <div class="tartech-stat">
+    <span>👎</span>
+    <button
+      id="tarbtechDislike"
+      class="tartech-vote">
+      👎
+    </button>
+    <span id="dislikeCount">0</span>
+  </div>
+
+</div>
+
+</body>
+</html>
 </body>
 </html>
