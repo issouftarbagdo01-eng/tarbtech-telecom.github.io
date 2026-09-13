@@ -179,7 +179,41 @@ function renderAdmin(){
       <button class="btn danger" onclick="deleteProduct('${id}')">Supprimer</button>
     </div>`).join("");
 }
+const viewedProductsThisSession = new Set();
 
+function observeProductViews(){
+  const cards = document.querySelectorAll(".product-card[data-product-id]");
+
+  const observer = new IntersectionObserver((entries)=>{
+    entries.forEach(entry=>{
+      if(!entry.isIntersecting || entry.intersectionRatio < 0.5) return;
+
+      const id = entry.target.dataset.productId;
+      const key = "tarbtech_product_viewed_" + id;
+
+      if(viewedProductsThisSession.has(id) || sessionStorage.getItem(key)){
+        observer.unobserve(entry.target);
+        return;
+      }
+
+      viewedProductsThisSession.add(id);
+
+      update(ref(db,"products/"+id),{
+        views: increment(1)
+      })
+      .then(()=>{
+        sessionStorage.setItem(key,"1");
+      })
+      .catch(()=>{
+        viewedProductsThisSession.delete(id);
+      });
+
+      observer.unobserve(entry.target);
+    });
+  },{threshold:0.5});
+
+  cards.forEach(card=>observer.observe(card));
+    }
 function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
 
 onValue(ref(db,"products"),snap=>{
