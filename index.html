@@ -2092,7 +2092,46 @@ setInterval(() => {
 
 </div>
 
-</body>
-</html>
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-analytics.js";
+  import {
+    getDatabase,
+    ref,
+    runTransaction,
+    onValue
+  } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyAhSS1VEPKumgegg_tB86VSTTLC0g1OAXg",
+    authDomain: "tarbtech-telecom.firebaseapp.com",
+    projectId: "tarbtech-telecom",
+    storageBucket: "tarbtech-telecom.firebasestorage.app",
+    messagingSenderId: "498893630122",
+    appId: "1:498893630122:web:5bfef4b1c18ade36423ed3",
+    measurementId: "G-HNSM9PZCQ9"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  getAnalytics(app);
+
+  const db = getDatabase(
+    app,
+    "https://tarbtech-telecom-default-rtdb.firebaseio.com/"
+  );
+
+  /* COMPTEUR DE VISITES */
+  const visitRef = ref(db, "stats/visites");
+
+  runTransaction(visitRef, (current) => {
+    return (current || 0) + 1;
+  });
+
+  onValue(visitRef, (snapshot) => {
+    document.getElementById("visitCount").textContent =
+      snapshot.val() || 0;
+  });
+</script>
+
 </body>
 </html>
