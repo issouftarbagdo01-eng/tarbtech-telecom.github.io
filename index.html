@@ -817,7 +817,10 @@ placeholder="Emoji (ex: 📱)">
 📷 Photo du produit
 </label>
 
-<input id="pimg" type="file" accept="image/*">
+<input
+id="pimg"
+type="file"
+accept="image/*">
 
 <small style="color:#6d6d72">
 📷 Choisissez la photo du produit depuis votre téléphone.
@@ -1017,22 +1020,14 @@ function removeCart(id){save(CART_KEY,cart().filter(i=>i.id!==id));renderCart();
 function directOrder(id){let p=products().find(x=>x.id===id);if(!p||p.stock<=0)return;window.open('https://wa.me/22676075658?text='+encodeURIComponent('Bonjour TARBTECH TELECOM, je souhaite commander : '+p.name+' — '+money(p.price)+'.'),'_blank')}
 function orderWhatsApp(){let c=cart();if(!c.length)return alert('Votre panier est vide.');let name=document.getElementById('customer').value.trim(),phone=document.getElementById('phone').value.trim(),address=document.getElementById('address').value.trim(),delivery=document.getElementById('delivery').value;if(!name||!phone)return alert('Veuillez renseigner votre nom et votre numéro.');let ps=products(),total=0,lines=[];c.forEach(i=>{let p=ps.find(x=>x.id===i.id);if(p){total+=p.price*i.qty;lines.push(p.name+' x'+i.qty+' = '+money(p.price*i.qty))}});let os=orders();os.unshift({id:Date.now(),date:new Date().toLocaleString('fr-FR'),customer:name,phone,address,delivery,items:lines,total});save(ORDER_KEY,os);save(CART_KEY,[]);closeCart();updateCartCount();window.open('https://wa.me/22676075658?text='+encodeURIComponent('Bonjour TARBTECH TELECOM,\nJe souhaite commander.\n\nClient : '+name+'\nTéléphone : '+phone+'\nMode : '+delivery+'\nLieu : '+(address||'À préciser')+'\n\nProduits :\n'+lines.join('\n')+'\n\nTotal : '+money(total)),'_blank')}
 
-function openAdmin(){
-  const pass=prompt('Mot de passe administrateur :');
-  if(pass===null)return;
-  if(pass!=='tarbtech2026'){alert('Mot de passe incorrect.');return;}
-  document.getElementById('admin').classList.add('show');
-  renderAdmin();
-  document.getElementById('admin').scrollIntoView({behavior:'smooth'});
-}
+function openAdmin(){const pass=prompt('Mot de passe administrateur :');if(pass===null)return;if(pass!=='tarbtech2026')return alert('Mot de passe incorrect.');const el=document.getElementById('admin');if(!el)return alert('Erreur : espace administrateur introuvable.');el.classList.add('show');renderAdmin();el.scrollIntoView({behavior:'smooth'});}
 function closeAdmin(){document.getElementById('admin').classList.remove('show')}
 function renderAdmin(){document.getElementById('adminList').innerHTML=products().map(p=>`<div class="order-card"><div style="display:flex;gap:10px;align-items:center"><div style="width:55px;height:55px;background:#eee;border-radius:8px;display:flex;align-items:center;justify-content:center;overflow:hidden">${p.image?`<img src="${p.image}" alt="" style="width:100%;height:100%;object-fit:contain">`:p.icon||'📦'}</div><b>${p.name}</b></div><br>${money(p.price)} — ${p.category} — Stock : ${p.stock}<br><br><button class="danger" onclick="deleteProduct(${p.id})">Supprimer</button></div>`).join('')||'<p>Aucun produit.</p>';let os=orders();document.getElementById('ordersList').innerHTML=os.length?os.map(o=>`<div class="order-card"><b>${o.date}</b><br>Client : ${o.customer}<br>Téléphone : ${o.phone}<br>Mode : ${o.delivery}<br>Lieu : ${o.address||'Non précisé'}<br><br>${o.items.join('<br>')}<br><br><b>Total : ${money(o.total)}</b></div>`).join(''):'<p>Aucune commande enregistrée sur cet appareil.</p>'}
 
 async function resizeImage(file){return new Promise((resolve,reject)=>{if(!file)return resolve('');let r=new FileReader();r.onload=e=>{let img=new Image();img.onload=()=>{let max=700,w=img.width,h=img.height;if(w>max){h=Math.round(h*max/w);w=max}let c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);resolve(c.toDataURL('image/jpeg',0.72))};img.onerror=reject;r.onerror=reject;r.readAsDataURL(file)});}
 
 async function addProduct(){
-  const input=document.getElementById('pimg');
-   let file=input&&input.files&&input.files[0] ? input.files[0] : null;
+  let input=document.getElementById('pimg'); let file=input&&input.files[0];
   let p={id:Date.now(),name:document.getElementById('pn').value.trim(),price:Number(document.getElementById('pp').value),category:document.getElementById('pc').value,stock:Number(document.getElementById('ps').value),icon:document.getElementById('pi').value.trim()||'📦',desc:document.getElementById('pd').value.trim(),image:''};
   if(!p.name||!p.price)return alert('Le nom et le prix sont obligatoires.');
   if(p.stock<0||!Number.isFinite(p.stock))return alert('Stock invalide.');
@@ -1046,7 +1041,7 @@ async function addProduct(){
     ps.push(p);
     await db.ref(PRODUCTS_DB_PATH).set(ps);
     alert('Produit publié pour tous les clients.');
-    document.getElementById('pn').value='';document.getElementById('pp').value='';document.getElementById('ps').value='1';document.getElementById('pi').value='';document.getElementById('pd').value='';if(document.getElementById('pimg'))document.getElementById('pimg').value='';
+    document.getElementById('pn').value='';document.getElementById('pp').value='';document.getElementById('ps').value='1';document.getElementById('pi').value='';document.getElementById('pd').value='';document.getElementById('pimg').value='';
   }catch(e){console.error(e);alert('Impossible de publier le produit. Vérifiez la connexion Firebase et les règles de la base de données.')}
 }
 
@@ -1078,8 +1073,15 @@ window.addEventListener('tarbtechFirebaseReady',async()=>{
       renderProducts();
       if(document.getElementById('admin').classList.contains('show'))renderAdmin();
       if(document.getElementById('cartModal').classList.contains('show'))renderCart();
-    },e=>console.error('Produits Firebase:',e));
-  }catch(e){console.error('Initialisation produits:',e)}
+    },e=>{
+      console.error('Produits Firebase:',e);
+      renderProducts();
+    });
+  }catch(e){
+    console.error('Initialisation produits:',e);
+    const local=JSON.parse(localStorage.getItem(PRODUCT_KEY)||'null');
+    if(Array.isArray(local)&&local.length){sharedProducts=local;renderProducts();}
+  }
 });
 </script>
 </script>
@@ -1098,10 +1100,18 @@ window.addEventListener('tarbtechFirebaseReady',async()=>{
     appId:"1:498893630122:web:5bfef4b1c18ade36423ed3"
   };
   try{
-    if(!firebase.apps.length)firebase.initializeApp(firebaseConfig);
+    if(!firebase.apps.length)firebase.initializeApp(statsFirebaseConfig);
     window.tarbtechDB=firebase.database();
-    window.dispatchEvent(new Event('tarbtechFirebaseReady'));
-  }catch(e){console.error('Firebase produits:',e)}
+    firebase.auth().signInAnonymously().then(()=>{
+      window.tarbtechFirebaseAuthReady=true;
+      window.dispatchEvent(new Event('tarbtechFirebaseReady'));
+    }).catch(e=>{
+      console.error('Firebase Auth produits:',e);
+      window.dispatchEvent(new Event('tarbtechFirebaseReady'));
+    });
+  }catch(e){
+    console.error('Firebase produits:',e);
+  }
 })();
 </script>
 
@@ -1110,12 +1120,8 @@ window.addEventListener('tarbtechFirebaseReady',async()=>{
      Visites • En ligne • J'aime • Je n'aime pas
      ========================================================= -->
 
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-database-compat.js"></script>
-
 <script>
-const firebaseConfig = {
+const statsFirebaseConfig = {
   apiKey: "AIzaSyAhSS1VEPKumgegg_tB86VSTTLC0g1OAXg",
   authDomain: "tarbtech-telecom.firebaseapp.com",
   databaseURL: "https://tarbtech-telecom-default-rtdb.firebaseio.com",
@@ -1374,46 +1380,7 @@ setInterval(() => {
 
 </div>
 
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-analytics.js";
-  import {
-    getDatabase,
-    ref,
-    runTransaction,
-    onValue
-  } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-database.js";
 
-  const firebaseConfig = {
-    apiKey: "AIzaSyAhSS1VEPKumgegg_tB86VSTTLC0g1OAXg",
-    authDomain: "tarbtech-telecom.firebaseapp.com",
-    projectId: "tarbtech-telecom",
-    storageBucket: "tarbtech-telecom.firebasestorage.app",
-    messagingSenderId: "498893630122",
-    appId: "1:498893630122:web:5bfef4b1c18ade36423ed3",
-    measurementId: "G-HNSM9PZCQ9"
-  };
-
-  const app = initializeApp(firebaseConfig);
-  getAnalytics(app);
-
-  const db = getDatabase(
-    app,
-    "https://tarbtech-telecom-default-rtdb.firebaseio.com/"
-  );
-
-  /* COMPTEUR DE VISITES */
-  const visitRef = ref(db, "stats/visites");
-
-  runTransaction(visitRef, (current) => {
-    return (current || 0) + 1;
-  });
-
-  onValue(visitRef, (snapshot) => {
-    document.getElementById("visitCount").textContent =
-      snapshot.val() || 0;
-  });
-</script>
 
 </body>
 </html>
