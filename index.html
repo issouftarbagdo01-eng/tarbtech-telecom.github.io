@@ -150,7 +150,7 @@ function renderProducts(){
   const arr=Object.entries(allProducts).filter(([id,p])=>currentFilter==="Toutes"||p.category===currentFilter);
   if(!arr.length){box.innerHTML="<p>Aucun produit disponible pour le moment.</p>";return;}
   box.innerHTML=arr.map(([id,p])=>`
-    <article class="card">
+    <article class="card product-card" data-product-id="${id}">
       <img src="${p.image}" alt="${esc(p.name)}" loading="lazy">
       <div class="card-body">
         <h3>${esc(p.name)}</h3>
