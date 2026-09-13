@@ -103,6 +103,7 @@ footer{margin-top:40px;background:#111827;color:#fff;padding:25px 5%;text-align:
     <input id="ps" required type="number" min="0" value="1" placeholder="Stock">
     <textarea id="pd" placeholder="Description"></textarea>
     <input id="pi" required type="file" accept="image/*">
+    <div class="small">La photo est automatiquement réduite avant d'être enregistrée pour économiser l'espace Firebase.</div>
     <button class="btn primary" type="submit">📷 Publier le produit</button>
   </form>
   <p id="uploadStatus" class="small"></p>
@@ -119,13 +120,12 @@ footer{margin-top:40px;background:#111827;color:#fff;padding:25px 5%;text-align:
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.1.0/firebase-app.js";
 import { getDatabase, ref, push, set, onValue, update, remove, increment, get }
 from "https://www.gstatic.com/firebasejs/12.1.0/firebase-database.js";
-import { getStorage, ref as storageRef, uploadBytes, getDownloadURL }
-from "https://www.gstatic.com/firebasejs/12.1.0/firebase-storage.js";
 
 /* ==========================================================
    IMPORTANT : REMPLACE UNIQUEMENT LES VALEURS CI-DESSOUS
    PAR LA CONFIGURATION WEB DE TON PROJET FIREBASE.
-   Firebase Console > Paramètres du projet > Tes applications
+   Les photos sont maintenant compressées dans le navigateur
+   puis enregistrées directement dans Realtime Database.
    ========================================================== */
 const firebaseConfig = {
   apiKey: "COLLE_ICI_TON_API_KEY",
@@ -139,7 +139,6 @@ const firebaseConfig = {
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
-const storage = getStorage(app);
 
 let allProducts = {};
 let currentFilter = "Toutes";
@@ -219,17 +218,46 @@ window.order=async function(id){
   window.open("https://wa.me/22676075658?text="+encodeURIComponent(text),"_blank");
 };
 
+function compressImage(file){
+  return new Promise((resolve,reject)=>{
+    const reader=new FileReader();
+    reader.onload=()=>{
+      const img=new Image();
+      img.onload=()=>{
+        const maxSize=900;
+        let w=img.width, h=img.height;
+        if(w>maxSize || h>maxSize){
+          if(w>=h){h=Math.round(h*maxSize/w);w=maxSize;}
+          else{w=Math.round(w*maxSize/h);h=maxSize;}
+        }
+        const canvas=document.createElement("canvas");
+        canvas.width=w; canvas.height=h;
+        const ctx=canvas.getContext("2d");
+        ctx.drawImage(img,0,0,w,h);
+        const data=canvas.toDataURL("image/jpeg",0.72);
+        resolve(data);
+      };
+      img.onerror=()=>reject(new Error("Impossible de lire la photo."));
+      img.src=reader.result;
+    };
+    reader.onerror=()=>reject(new Error("Impossible de lire le fichier."));
+    reader.readAsDataURL(file);
+  });
+}
+
 window.addProduct=async function(e){
   e.preventDefault();
   const file=document.getElementById("pi").files[0];
   const status=document.getElementById("uploadStatus");
   if(!file){status.textContent="Choisis une photo.";return;}
-  status.textContent="⏳ Téléversement de la photo...";
+  if(!file.type.startsWith("image/")){
+    status.textContent="❌ Le fichier doit être une image.";
+    return;
+  }
+  status.textContent="⏳ Compression et publication de la photo...";
   try{
+    const image=await compressImage(file);
     const productRef=push(ref(db,"products"));
-    const imageRef=storageRef(storage,"products/"+productRef.key+"/"+Date.now()+"_"+file.name);
-    await uploadBytes(imageRef,file);
-    const image=await getDownloadURL(imageRef);
     await set(productRef,{
       name:document.getElementById("pn").value.trim(),
       price:Number(document.getElementById("pp").value),
@@ -240,7 +268,7 @@ window.addProduct=async function(e){
       createdAt:Date.now()
     });
     e.target.reset(); document.getElementById("ps").value=1;
-    status.textContent="✅ Produit publié. Il est maintenant disponible pour les clients.";
+    status.textContent="✅ Produit publié. Il est maintenant visible par les clients.";
   }catch(err){
     console.error(err);
     status.textContent="❌ Erreur : "+err.message;
