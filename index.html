@@ -1032,7 +1032,8 @@ function renderAdmin(){document.getElementById('adminList').innerHTML=products()
 async function resizeImage(file){return new Promise((resolve,reject)=>{if(!file)return resolve('');let r=new FileReader();r.onload=e=>{let img=new Image();img.onload=()=>{let max=700,w=img.width,h=img.height;if(w>max){h=Math.round(h*max/w);w=max}let c=document.createElement('canvas');c.width=w;c.height=h;c.getContext('2d').drawImage(img,0,0,w,h);resolve(c.toDataURL('image/jpeg',0.72))};img.onerror=reject;r.onerror=reject;r.readAsDataURL(file)});}
 
 async function addProduct(){
-  let file=document.getElementById('pimg').files[0]||document.getElementById('pimage').files[0];
+  let imageInput=document.getElementById('pimg');
+  let file=imageInput && imageInput.files ? imageInput.files[0] : null;
   let p={id:Date.now(),name:document.getElementById('pn').value.trim(),price:Number(document.getElementById('pp').value),category:document.getElementById('pc').value,stock:Number(document.getElementById('ps').value),icon:document.getElementById('pi').value.trim()||'📦',desc:document.getElementById('pd').value.trim(),image:''};
   if(!p.name||!p.price)return alert('Le nom et le prix sont obligatoires.');
   if(p.stock<0||!Number.isFinite(p.stock))return alert('Stock invalide.');
@@ -1046,8 +1047,10 @@ async function addProduct(){
     ps.push(p);
     await db.ref(PRODUCTS_DB_PATH).set(ps);
     alert('Produit publié pour tous les clients.');
-    document.getElementById('pn').value='';document.getElementById('pp').value='';document.getElementById('ps').value='1';document.getElementById('pi').value='';document.getElementById('pd').value='';document.getElementById('pimg').value='';document.getElementById('pimage').value='';
-  }catch(e){console.error(e);alert('Impossible de publier le produit. Vérifiez la connexion Firebase et les règles de la base de données.')}
+    document.getElementById('pn').value='';document.getElementById('pp').value='';document.getElementById('ps').value='1';document.getElementById('pi').value='';document.getElementById('pd').value='';if(imageInput)imageInput.value='';
+  }catch(e){console.error(e);alert('Impossible de publier le produit.
+
+Détail : '+(e && e.message ? e.message : e));}
 }
 
 async function deleteProduct(id){if(!confirm('Supprimer ce produit pour tous les clients ?'))return;try{const db=window.tarbtechDB;const snap=await db.ref(PRODUCTS_DB_PATH).once('value');let ps=Object.values(snap.val()||{}).filter(p=>Number(p.id)!==Number(id));await db.ref(PRODUCTS_DB_PATH).set(ps);save(CART_KEY,cart().filter(i=>i.id!==id));alert('Produit supprimé pour tous les clients.')}catch(e){console.error(e);alert('Erreur lors de la suppression.')} }
@@ -1394,7 +1397,7 @@ setInterval(() => {
     measurementId: "G-HNSM9PZCQ9"
   };
 
-  const app = initializeApp(firebaseConfig);
+  const app = initializeApp(firebaseConfig, 'stats-module');
   getAnalytics(app);
 
   const db = getDatabase(
