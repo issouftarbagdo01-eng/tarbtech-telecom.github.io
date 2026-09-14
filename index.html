@@ -329,9 +329,9 @@ window.openAdmin=async function(){
     document.getElementById("admin").scrollIntoView({behavior:"smooth"});
 
   }catch(error){
-    alert("Connexion impossible : "+error.message);
+  alert("Erreur Firebase : " + error.code + "\n\n" + error.message);
   }
-};
+
 window.closeAdmin=function(){document.getElementById("admin").style.display="none"};
 </script>
 </body>
